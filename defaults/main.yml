@@ -1,0 +1,8 @@
+---
+# defaults file for role-default-apps
+
+# Define List of Packages to Istallation
+default_app_list:
+  - vim
+  - bind-utils
+  - net-tools

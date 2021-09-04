@@ -1,0 +1,10 @@
+---
+
+- name: Fail on unsupported operating system
+  fail:
+    msg: "This OS is not supported! Supported OS are: CentOS 7, 8 and RHEL 7, 8 and Oracle Linux 7, 8 and AlmaLinux 8, and Rocky Linux 8"
+  when:
+   - ansible_system not in ['Linux']
+   - ansible_architecture not in ['x86_64']
+   - ansible_distribution not in ['CentOS', 'RedHat', 'Oracle Linux', 'AlmaLinux', 'OracleLinux','Rocky']
+   - ansible_distribution_major_version not in ['7', '8']

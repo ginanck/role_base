@@ -1,0 +1,8 @@
+---
+
+- name: install default-apps
+  yum:
+    name:
+      - "{{ default_app_list | join(',') }}"
+    state: present
+    update_cache: true
