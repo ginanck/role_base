@@ -4,5 +4,5 @@
 - name: Check OS Distribution
   include_tasks: os-check.yml
 
-- name: Install Default Apps
+- name: Install List of Default Apps
   include_tasks: configure.yml
