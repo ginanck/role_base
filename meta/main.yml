@@ -1,6 +1,6 @@
 galaxy_info:
   author: gkorkmaz
-  description: Install Default Apps
+  description: Setup Postgresql Repository
   company: your company (optional)
 
   license: license (GPL-2.0-or-later, MIT, etc)
@@ -20,6 +20,9 @@ galaxy_info:
     - 7
     - 8
   - name: AlmaLinux
+    versions:
+    - 8
+  - name: Rocky
     versions:
     - 8
 
