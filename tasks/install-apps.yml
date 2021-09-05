@@ -5,4 +5,4 @@
     name:
       - "{{ default_app_list | join(',') }}"
     state: present
-    update_cache: true
+    update_cache: yes

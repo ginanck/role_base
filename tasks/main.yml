@@ -5,4 +5,4 @@
   include_tasks: os-check.yml
 
 - name: Install List of Default Apps
-  include_tasks: configure.yml
+  include_tasks: install-apps.yml
