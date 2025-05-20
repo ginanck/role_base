@@ -1,6 +1,10 @@
 ---
 # tasks file for role-default-apps
 
+- name: Include base vars
+  ansible.builtin.include_vars:
+    file: "{{ ansible_os_family }}.yml"
+
 - name: install prerequisite packages
   ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
 
