@@ -7,8 +7,8 @@
 - name: disable cloud-init manage_hostname
   ansible.builtin.include_tasks: cloud-init.yml
 
-- name: setup hostname
-  ansible.builtin.include_tasks: hostname.yml
+- name: setup hosts
+  ansible.builtin.include_tasks: hosts.yml
 
 - name: disable firewall
   ansible.builtin.include_tasks: firewall.yml
