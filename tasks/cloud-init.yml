@@ -1,0 +1,26 @@
+---
+
+- name: Ensure cloud-init config directory exists
+  file:
+    path: /etc/cloud/cloud.cfg.d
+    state: directory
+    mode: '0755'
+
+# Set preserve_hostname to true and manage_etc_hosts to false in cloud-init config
+- name: Set preserve_hostname to true in cloud-init config
+  lineinfile:
+    path: /etc/cloud/cloud.cfg
+    regexp: '^preserve_hostname:'
+    line: 'preserve_hostname: true'
+    state: present
+  notify: restart cloud-init service
+
+- name: Add manage_etc_hosts setting right after preserve_hostname
+  blockinfile:
+    path: /etc/cloud/cloud.cfg
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR MANAGE_ETC_HOSTS"
+    insertafter: '^preserve_hostname: true'
+    block: |
+      manage_etc_hosts: false
+    state: present
+  notify: restart cloud-init service

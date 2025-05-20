@@ -1,0 +1,13 @@
+---
+
+- name: Install prerequisites (RedHat family with dnf)
+  ansible.builtin.dnf:
+    name:
+      - vim
+      - bind-utils
+      - net-tools
+      - tar
+      - unzip
+      - gzip
+    state: present
+    update_cache: yes

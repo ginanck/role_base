@@ -1,0 +1,33 @@
+---
+
+- name: Gather OS facts
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - 'distribution'
+
+- name: Stop and disable firewalld service
+  ansible.builtin.systemd:
+    name: firewalld
+    state: stopped
+    enabled: false
+    masked: yes  # Adding masking for extra protection
+  ignore_errors: true
+  when: ansible_os_family == 'RedHat'
+
+- name: Stop and disable ufw service
+  ansible.builtin.systemd:
+    name: ufw
+    state: stopped
+    enabled: false
+    masked: yes  # Adding masking for extra protection
+  ignore_errors: true
+  when: ansible_os_family == 'Debian'
+
+- name: Disable UFW if installed (Ubuntu)
+  ansible.builtin.command: ufw disable
+  register: ufw_disable
+  changed_when: ufw_disable.rc == 0
+  failed_when: false
+  when: ansible_os_family == 'Debian'

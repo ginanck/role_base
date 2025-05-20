@@ -1,0 +1,13 @@
+---
+
+- name: Install prerequisites (Debian family)
+  ansible.builtin.apt:
+    name:
+      - vim
+      - bind9-utils
+      - net-tools
+      - tar
+      - unzip
+      - gzip
+    state: present
+    update_cache: yes

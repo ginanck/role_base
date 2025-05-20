@@ -1,8 +1,18 @@
 ---
 # tasks file for role-default-apps
 
-- name: Check OS Distribution
-  include_tasks: os-check.yml
+- name: install prerequisite packages
+  ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
 
-- name: Install List of Default Apps
-  include_tasks: install-apps.yml
+- name: disable cloud-init manage_hostname
+  ansible.builtin.include_tasks: cloud-init.yml
+
+- name: setup hostname
+  ansible.builtin.include_tasks: hostname.yml
+
+- name: disable firewall
+  ansible.builtin.include_tasks: firewall.yml
+
+- name: disable swap
+  ansible.builtin.include_tasks: swap.yml
+  when: base_swap_disabled
