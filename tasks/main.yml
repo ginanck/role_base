@@ -16,3 +16,6 @@
 - name: disable swap
   ansible.builtin.include_tasks: swap.yml
   when: base_swap_disabled
+
+- name: disable selinux
+  ansible.builtin.include_tasks: selinux.yml
