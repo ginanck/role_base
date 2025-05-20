@@ -10,6 +10,9 @@
 - name: setup hosts
   ansible.builtin.include_tasks: hosts.yml
 
+- name: setup hostname of the nodes
+  ansible.builtin.include_tasks: hostname.yml
+
 - name: disable firewall
   ansible.builtin.include_tasks: firewall.yml
 

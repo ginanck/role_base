@@ -1,0 +1,6 @@
+---
+
+- name: Ensure hostname is set
+  ansible.builtin.hostname:
+    name: "{{ base_hostname }}"
+  become: true
