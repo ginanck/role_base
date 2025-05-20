@@ -1,7 +1,7 @@
 ---
 # defaults file for role-default-apps
 
-base_swap_disabled: true
+base_swap_disabled: false
 base_hosts_hostname_list: []
   # - ip: 192.168.1.10
   #   hostname: web01
