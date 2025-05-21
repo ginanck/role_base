@@ -1,0 +1,25 @@
+---
+
+- name: Generate /etc/chrony.conf
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: "/etc/chrony.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  when: base_chrony_config is defined
+
+- name: Generate /etc/chrony.keys
+  ansible.builtin.template:
+    src: chrony.keys.j2
+    dest: "/etc/chrony.keys"
+    owner: root
+    group: root
+    mode: "0640"
+  when: base_chrony_keys is defined
+
+- name: Restart chronyd
+  ansible.builtin.systemd:
+    name: chronyd
+    state: restarted
+    enabled: true

@@ -1,0 +1,71 @@
+{% macro add_server(vars) %}
+    {% for item in vars.name %}
+server {{ item }} {{ vars.param }} 
+    {% endfor %}
+{% endmacro %}
+
+{% macro add_sourcedir(vars) %}
+sourcedir {{ vars }}
+{% endmacro %}
+
+{% macro add_driftfile(vars) %}
+driftfile {{ vars }}
+{% endmacro %}
+
+{% macro add_makestep(vars) %}
+makestep {{ vars }}
+{% endmacro %}
+
+{% macro add_rtcsync(vars) %}
+{% if vars.rtcsync | default('no') == 'yes' %}
+rtcsync
+{% endif %}
+{% endmacro %}
+
+{% macro add_hwtimestamp(vars) %}
+hwtimestamp {{ vars }}
+{% endmacro %}
+
+{% macro add_minsources(vars) %}
+minsources {{ vars }}
+{% endmacro %}
+
+{% macro add_allow(vars) %}
+    {% for item in vars %}
+allow {{ item }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro add_local(vars) %}
+{% for key, value in vars.items() %}
+local {{ key }} {{ value }}
+{% endfor %}
+{% endmacro %}
+
+{% macro add_authselectmode(vars) %}
+authselectmode {{ vars }}
+{% endmacro %}
+
+{% macro add_keyfile(vars) %}
+keyfile {{ vars }}
+{% endmacro %}
+
+{% macro add_ntsdumpdir(vars) %}
+ntsdumpdir {{ vars }}
+{% endmacro %}
+
+{% macro add_leapsecmode(vars) %}
+leapsecmode {{ vars }}
+{% endmacro %}
+
+{% macro add_leapsectz(vars) %}
+leapsectz {{ vars }}
+{% endmacro %}
+
+{% macro add_logdir(vars) %}
+logdir {{ vars }}
+{% endmacro %}
+
+{% macro add_log(vars) %}
+log {% for key, value in vars.items() %}{% if value %}{{ key }} {% endif %}{% endfor %}
+{% endmacro %}

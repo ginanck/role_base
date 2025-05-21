@@ -1,0 +1,67 @@
+#jinja2: trim_blocks: "True", lstrip_blocks: "True"
+{% import "add_macro.j2" as macro %}
+{{ ansible_managed | comment }}
+
+{% if base_chrony_config.server is defined %}
+    {{- macro.add_server(base_chrony_config.server) }}
+{% endif %}
+
+{%- if base_chrony_config.sourcedir is defined %}
+    {{- macro.add_sourcedir(base_chrony_config.sourcedir) }}
+{%- endif %}
+
+{%- if base_chrony_config.driftfile is defined %}
+    {{- macro.add_driftfile(base_chrony_config.driftfile) }}
+{%- endif %}
+
+{%- if base_chrony_config.makestep is defined %}
+    {{- macro.add_makestep(base_chrony_config.makestep) }}
+{%- endif %}
+
+{%- if base_chrony_config.rtcsync is defined %}
+    {{- macro.add_rtcsync(base_chrony_config.rtcsync) }}
+{%- endif %}
+
+{%- if base_chrony_config.hwtimestamp is defined %}
+    {{- macro.add_hwtimestamp(base_chrony_config.hwtimestamp) }}
+{%- endif %}
+
+{%- if base_chrony_config.minsources is defined %}
+    {{- macro.add_minsources(base_chrony_config.minsources) }}
+{% endif %}
+
+{%- if base_chrony_config.allow is defined %}
+    {{- macro.add_allow(base_chrony_config.allow) }}
+{% endif %}
+
+{%- if base_chrony_config.local is defined %}
+    {{- macro.add_local(base_chrony_config.local) }}
+{%- endif %}
+
+{%- if base_chrony_config.authselectmode is defined %}
+    {{- macro.add_authselectmode(base_chrony_config.authselectmode) }}
+{%- endif %}
+
+{%- if base_chrony_config.keyfile is defined %}
+    {{- macro.add_keyfile(base_chrony_config.keyfile) }}
+{%- endif %}
+
+{%- if base_chrony_config.ntsdumpdir is defined %}
+    {{- macro.add_ntsdumpdir(base_chrony_config.ntsdumpdir) }}
+{%- endif %}
+
+{%- if base_chrony_config.leapsecmode is defined %}
+    {{- macro.add_leapsecmode(base_chrony_config.leapsecmode) }}
+{%- endif %}
+
+{%- if base_chrony_config.leapsectz is defined %}
+    {{- macro.add_leapsectz(base_chrony_config.leapsectz) }}
+{%- endif %}
+
+{%- if base_chrony_config.logdir is defined %}
+    {{- macro.add_logdir(base_chrony_config.logdir) }}
+{%- endif %}
+
+{%- if base_chrony_config.log is defined %}
+    {{- macro.add_log(base_chrony_config.log) }}
+{%- endif %}

@@ -21,5 +21,69 @@ base_default_packages:
   - unzip
   - gzip
   - telnet
+  - chrony
+  - lvm2
+  - lvm2-libs
 
 base_additional_packages: []
+
+base_timezone: "Europe/Helsinki"
+
+base_chrony_config:
+  server:
+    param: iburst
+    name:
+      - 0.fi.pool.ntp.org
+      - 1.fi.pool.ntp.org
+      - 2.fi.pool.ntp.org
+      - 3.fi.pool.ntp.org
+  sourcedir: /run/chrony-dhcp
+  driftfile: /var/lib/chrony/drift
+  makestep: "1.0 3"
+  rtcsync: yes
+  hwtimestamp: "*"
+  minsources: 2
+  # allow:
+  #   - 192.168.0.0/24
+  #   - 192.168.1.0/24
+  local:
+    stratum: 10
+  authselectmode: require
+  keyfile: /etc/chrony.keys
+  ntsdumpdir: /var/lib/chrony
+  leapsecmode: slew
+  leapsectz: right/UTC
+  logdir: /var/log/chrony
+  log:
+    measurements: yes
+    statistics: yes
+    tracking: yes
+
+base_chrony_keys: []
+
+base_lvm_disks: []
+  # - pv: /dev/vdb
+  #   vg: data
+  #   lv:
+  #     - name: jenkins
+  #       size: 15G
+  #       path: /data/jenkins
+
+  #     - name: nginx
+  #       size: 10G
+  #       path: /data/log
+
+  # - pvs: /dev/vdc
+  #   vgs: log
+  #   lvs:
+  #     - name: log1
+  #       size: 10G
+  #       path: /opt/log1
+
+  #     - name: log2
+  #       size: 15G
+  #       path: /opt/log2
+
+  #     - name: log3
+  #       size: 100%FREE
+  #       path: /opt/log3

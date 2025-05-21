@@ -1,0 +1,44 @@
+---
+
+- name: Create a Volume Group
+  ansible.builtin.lvg:
+    pvs: "{{ disk.pv }}"
+    vg: "{{ disk.vg }}"
+
+- name: Create a Logical Volume
+  ansible.builtin.lvol:
+    vg: "{{ disk.vg }}"
+    lv: "{{ item.name }}"
+    size: "{{ item.size }}"
+    resizefs: yes
+  loop: "{{ disk.lv }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Make Filesystem
+  ansible.builtin.filesystem:
+    fstype: xfs
+    dev: /dev/{{ disk.vg }}/{{ item.name }}
+  loop: "{{ disk.lv }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Create mount point directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ disk.lv }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Mount Filesystem
+  ansible.posix.mount:
+    src: /dev/{{ disk.vg }}/{{ item.name }}
+    path: "{{ item.path }}"
+    fstype: xfs
+    opts: defaults
+    state: mounted
+  loop: "{{ disk.lv }}"
+  loop_control:
+    label: "{{ item.path }}"

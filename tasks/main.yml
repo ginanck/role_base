@@ -2,8 +2,7 @@
 # tasks file for role_base
 
 - name: Include base vars
-  ansible.builtin.include_vars:
-    file: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
 - name: install prerequisite packages
   ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
@@ -26,3 +25,16 @@
 
 - name: disable selinux
   ansible.builtin.include_tasks: selinux.yml
+
+- name: setup timezone
+  ansible.builtin.include_tasks: timezone.yml
+
+- name: setup chrony
+  ansible.builtin.include_tasks: chronyd.yml
+
+- name: setup lvm disk
+  ansible.builtin.include_tasks: lvm.yml
+  loop: "{{ base_lvm_disks }}"
+  loop_control:
+    loop_var: disk
+    label: "{{ disk.pv }}"

@@ -5,3 +5,4 @@ base_os_specific_packages:
   - python3-libselinux
   - python3-policycoreutils
   - bind-utils
+  - epel-release
