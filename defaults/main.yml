@@ -1,5 +1,5 @@
 ---
-# defaults file for role-default-apps
+# defaults file for role_base
 
 base_swap_disabled: false
 base_hosts_hostname_list: []
