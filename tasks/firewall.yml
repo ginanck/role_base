@@ -24,10 +24,3 @@
     masked: yes  # Adding masking for extra protection
   ignore_errors: true
   when: ansible_os_family == 'Debian'
-
-- name: Disable UFW if installed (Ubuntu)
-  ansible.builtin.command: ufw disable
-  register: ufw_disable
-  changed_when: ufw_disable.rc == 0
-  failed_when: false
-  when: ansible_os_family == 'Debian'
