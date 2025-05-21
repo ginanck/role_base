@@ -23,7 +23,6 @@ base_default_packages:
   - telnet
   - chrony
   - lvm2
-  - lvm2-libs
 
 base_additional_packages: []
 

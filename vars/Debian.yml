@@ -5,3 +5,4 @@ base_os_specific_packages:
   - selinux-utils
   - policycoreutils
   - bind9-utils
+  - liblvm2-dev

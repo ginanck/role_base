@@ -6,3 +6,4 @@ base_os_specific_packages:
   - python3-policycoreutils
   - bind-utils
   - epel-release
+  - lvm2-libs
