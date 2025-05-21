@@ -15,3 +15,13 @@ base_hosts_hostname_list: []
   # - ip: 192.168.1.13
   #   hostname: cache01
   #   fqdn: cache01.example.com
+
+base_default_packages:
+  - vim
+  - net-tools
+  - tar
+  - unzip
+  - gzip
+  - telnet
+
+base_additional_packages: []

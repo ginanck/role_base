@@ -1,14 +1,7 @@
 ---
 
-selinux_packages:
+base_os_specific_packages:
   - python3-selinux
   - selinux-utils
   - policycoreutils
-
-default_packages:
-  - vim
   - bind9-utils
-  - net-tools
-  - tar
-  - unzip
-  - gzip
