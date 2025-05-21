@@ -2,7 +2,7 @@
 # defaults file for role_base
 
 base_swap_disabled: false
-base_hosts_hostname_list: []
+base_hostname_entries: []
   # - ip: 192.168.1.10
   #   hostname: web01
   #   fqdn: web01.example.com
@@ -11,10 +11,8 @@ base_hosts_hostname_list: []
   #   fqdn: db01.example.com
   # - ip: 192.168.1.12
   #   hostname: app01
-  #   fqdn: app01.example.com
   # - ip: 192.168.1.13
   #   hostname: cache01
-  #   fqdn: cache01.example.com
 
 base_default_packages:
   - vim
