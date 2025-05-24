@@ -1,0 +1,37 @@
+---
+
+- name: ensure cloud-init config directory exists
+  ansible.builtin.file:
+    path: /etc/cloud/cloud.cfg.d
+    state: directory
+    mode: '0755'
+
+- name: set preserve_hostname to true in cloud-init config
+  ansible.builtin.lineinfile:
+    path: /etc/cloud/cloud.cfg
+    regexp: '^preserve_hostname:'
+    line: 'preserve_hostname: true'
+    state: present
+    backup: true
+  register: cloud_init_result
+
+- name: add manage_etc_hosts setting right after preserve_hostname
+  ansible.builtin.blockinfile:
+    path: /etc/cloud/cloud.cfg
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR MANAGE_ETC_HOSTS"
+    insertafter: '^preserve_hostname: true'
+    block: |
+      manage_etc_hosts: false
+    state: present
+  register: manage_etc_hosts_result
+
+- name: restart cloud-init
+  ansible.builtin.systemd:
+    name: cloud-init
+    state: restarted
+    enabled: true
+    daemon_reload: yes
+  ignore_errors: true
+  when: >
+    (cloud_init_result is defined and cloud_init_result.changed) or
+    (manage_etc_hosts_result is defined and manage_etc_hosts_result.changed)

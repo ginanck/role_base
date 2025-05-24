@@ -1,6 +1,6 @@
 ---
 
-- name: Ensure hostname is set
+- name: set hostname on the node
   ansible.builtin.hostname:
     name: "{{ base_hostname }}"
   become: true

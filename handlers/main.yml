@@ -1,8 +1,2 @@
 ---
 # handlers file for role_base
-
-- name: restart cloud-init service
-  service:
-    name: cloud-init
-    state: restarted
-  ignore_errors: yes

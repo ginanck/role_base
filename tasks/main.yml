@@ -1,42 +1,42 @@
 ---
 # tasks file for role_base
 
-- name: Include base vars
+- name: Include Base Vars
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
-- name: install prerequisite packages
+- name: Install Prerequisite Packages
   ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
 
-- name: setup epel-repo
+- name: Setup Epel-Repo
   ansible.builtin.include_tasks: epel/RedHat.yml
   when: ansible_os_family in ['RedHat']
 
-- name: disable cloud-init manage_hostname
-  ansible.builtin.include_tasks: cloud-init.yml
+- name: Setup Timezone
+  ansible.builtin.include_tasks: timezone.yml
 
-- name: setup hosts
+- name: Setup Chrony
+  ansible.builtin.include_tasks: chronyd.yml
+
+- name: Disable Selinux
+  ansible.builtin.include_tasks: selinux.yml
+
+- name: Disable Cloud-Init manage_hostname
+  ansible.builtin.include_tasks: cloud_init.yml
+
+- name: Setup Hosts
   ansible.builtin.include_tasks: hosts.yml
 
-- name: setup hostname of the nodes
+- name: Setup Hostname of the Nodes
   ansible.builtin.include_tasks: hostname.yml
 
-- name: disable firewall
+- name: Disable Firewall
   ansible.builtin.include_tasks: firewall.yml
 
-- name: disable swap
+- name: Disable Swap
   ansible.builtin.include_tasks: swap.yml
   when: base_swap_disabled
 
-- name: disable selinux
-  ansible.builtin.include_tasks: selinux.yml
-
-- name: setup timezone
-  ansible.builtin.include_tasks: timezone.yml
-
-- name: setup chrony
-  ansible.builtin.include_tasks: chronyd.yml
-
-- name: setup lvm disk
+- name: Setup LVM Disk
   ansible.builtin.include_tasks: lvm.yml
   loop: "{{ base_lvm_disks }}"
   loop_control:

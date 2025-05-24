@@ -1,6 +1,6 @@
 ---
 
-- name: Install prerequisites (RedHat family with yum)
+- name: install prerequisites (RedHat family with yum)
   ansible.builtin.yum:
     name: "{{ base_default_packages + base_additional_packages + base_os_specific_packages }}"
     state: present

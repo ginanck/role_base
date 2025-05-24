@@ -7,7 +7,7 @@
       - '!min'
       - 'distribution'
 
-- name: Stop and disable firewalld service
+- name: stop and disable firewalld service
   ansible.builtin.systemd:
     name: firewalld
     state: stopped
@@ -16,7 +16,7 @@
   ignore_errors: true
   when: ansible_os_family == 'RedHat'
 
-- name: Stop and disable ufw service
+- name: stop and disable ufw service
   ansible.builtin.systemd:
     name: ufw
     state: stopped

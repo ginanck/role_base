@@ -1,25 +1,33 @@
 ---
 
-- name: Generate /etc/chrony.conf
+- name: generate /etc/chrony.conf
   ansible.builtin.template:
     src: chrony.conf.j2
     dest: "/etc/chrony.conf"
     owner: root
     group: root
     mode: "0644"
+    backup: true
+  register: chrony_conf_result
   when: base_chrony_config is defined
 
-- name: Generate /etc/chrony.keys
+- name: generate /etc/chrony.keys
   ansible.builtin.template:
     src: chrony.keys.j2
     dest: "/etc/chrony.keys"
     owner: root
     group: root
-    mode: "0640"
+    mode: "0644"
+    backup: true
+  register: chrony_keys_result
   when: base_chrony_keys is defined
 
-- name: Restart chronyd
+- name: restart chronyd
   ansible.builtin.systemd:
     name: chronyd
     state: restarted
     enabled: true
+    daemon_reload: yes
+  when: >
+    (chrony_conf_result is defined and chrony_conf_result.changed) or
+    (chrony_keys_result is defined and chrony_keys_result.changed)

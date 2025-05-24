@@ -1,5 +1,5 @@
 ---
 
-- name: Set timezone
+- name: set timezone on nodes
   ansible.builtin.timezone:
     name: "{{ base_timezone }}"
