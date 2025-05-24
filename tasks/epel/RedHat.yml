@@ -1,0 +1,7 @@
+---
+
+- name: setup epel-repo
+  ansible.builtin.dnf:
+    name: epel-release.noarch
+    state: present
+    update_cache: yes

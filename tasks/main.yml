@@ -7,6 +7,10 @@
 - name: install prerequisite packages
   ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
 
+- name: setup epel-repo
+  ansible.builtin.include_tasks: epel/RedHat.yml
+  when: ansible_os_family in ['RedHat']
+
 - name: disable cloud-init manage_hostname
   ansible.builtin.include_tasks: cloud-init.yml
 
