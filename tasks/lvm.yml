@@ -1,17 +1,16 @@
 ---
 
 - name: Create a Volume Group
-  ansible.builtin.lvg:
+  community.general.lvg:
     pvs: "{{ disk.pv }}"
     vg: "{{ disk.vg }}"
     state: present
 
 - name: Create a Logical Volume
-  ansible.builtin.lvol:
+  community.general.lvol:
     vg: "{{ disk.vg }}"
     lv: "{{ item.name }}"
     size: "{{ item.size }}"
-    state: present
     resizefs: yes
   loop: "{{ disk.lv }}"
   loop_control:
