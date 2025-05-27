@@ -31,6 +31,7 @@
 
 - name: Setup resolve.conf
   ansible.builtin.include_tasks: resolve.yml
+  when: base_resolv_conf_managed
 
 - name: Disable Firewall
   ansible.builtin.include_tasks: firewall.yml
