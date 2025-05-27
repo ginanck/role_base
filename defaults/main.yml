@@ -14,6 +14,18 @@ base_hostname_entries: []
   # - ip: 192.168.1.13
   #   hostname: cache01
 
+base_nameserver_entries:
+  - "172.16.2.21"
+  - "8.8.8.8"
+  - "8.8.4.4"
+
+base_nameserver_search_domains:
+  - "."
+
+base_nameserver_resolv_options:
+  - "edns0"
+  - "trust-ad"
+
 base_default_packages:
   - vim
   - net-tools

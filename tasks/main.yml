@@ -29,6 +29,9 @@
 - name: Setup Hostname of the Nodes
   ansible.builtin.include_tasks: hostname.yml
 
+- name: Setup resolve.conf
+  ansible.builtin.include_tasks: resolve.yml
+
 - name: Disable Firewall
   ansible.builtin.include_tasks: firewall.yml
 

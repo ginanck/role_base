@@ -15,15 +15,14 @@
     backup: true
   register: cloud_init_result
 
-- name: add manage_etc_hosts setting right after preserve_hostname
-  ansible.builtin.blockinfile:
+- name: remove update_etc_hosts from cloud_init_modules
+  ansible.builtin.lineinfile:
     path: /etc/cloud/cloud.cfg
-    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR MANAGE_ETC_HOSTS"
-    insertafter: '^preserve_hostname: true'
-    block: |
-      manage_etc_hosts: false
+    regexp: '^(\s*)-\s*update_etc_hosts\s*$'
+    line: '  # - update_etc_hosts'
+    backrefs: yes
     state: present
-  register: manage_etc_hosts_result
+  register: update_etc_hosts_result
 
 - name: restart cloud-init
   ansible.builtin.systemd:
@@ -34,4 +33,4 @@
   ignore_errors: true
   when: >
     (cloud_init_result is defined and cloud_init_result.changed) or
-    (manage_etc_hosts_result is defined and manage_etc_hosts_result.changed)
+    (update_etc_hosts_result is defined and update_etc_hosts_result.changed)
