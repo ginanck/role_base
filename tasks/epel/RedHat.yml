@@ -4,4 +4,3 @@
   ansible.builtin.dnf:
     name: epel-release.noarch
     state: present
-    update_cache: yes

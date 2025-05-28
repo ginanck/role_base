@@ -4,6 +4,13 @@
 - name: Include Base Vars
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Install Prerequisite Packages
+  ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
+
+- name: Setup Epel-Repo
+  ansible.builtin.include_tasks: epel/RedHat.yml
+  when: ansible_os_family in ['RedHat']
+
 - name: Disable Cloud-Init manage_hostname
   ansible.builtin.include_tasks: cloud_init.yml
 
@@ -39,10 +46,3 @@
   loop_control:
     loop_var: disk
     label: "{{ disk.pv }}"
-
-- name: Install Prerequisite Packages
-  ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
-
-- name: Setup Epel-Repo
-  ansible.builtin.include_tasks: epel/RedHat.yml
-  when: ansible_os_family in ['RedHat']
