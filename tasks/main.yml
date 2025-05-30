@@ -18,11 +18,11 @@
   ansible.builtin.include_tasks: resolve.yml
   when: base_resolv_conf_managed
 
-- name: Setup Hosts
-  ansible.builtin.include_tasks: hosts.yml
-
 - name: Setup Hostname of the Nodes
   ansible.builtin.include_tasks: hostname.yml
+
+- name: Setup Hosts
+  ansible.builtin.include_tasks: hosts.yml
 
 - name: Setup Timezone
   ansible.builtin.include_tasks: timezone.yml

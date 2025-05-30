@@ -5,12 +5,13 @@
 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
 # ::1       localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-# Inventory hosts
+# Current node hostname
+{{ ansible_default_ipv4.address }} {{ base_hostname }} {{ base_hostname }}.{{ base_domain }}
+
+# Additional hosts entries
 {% if base_hostname_entries is defined %}
 {% for host in base_hostname_entries %}
-{{ host.ip }} {{ host.hostname }}{% if host.fqdn is defined %} {{ host.fqdn }}{% endif %}
+{{ host.ip }} {{ host.hostname }}{% if host.fqdn is defined %} {{ host.fqdn }}{% else %} {{ host.hostname }}.{{ base_domain }}{% endif %}
 
 {% endfor %}
 {% endif %}
-
-# Additional custom hosts entries can be added below

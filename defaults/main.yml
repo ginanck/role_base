@@ -1,7 +1,11 @@
 ---
 # defaults file for role_base
 
+base_domain: "internal.guru"
+base_hostname: ""
+
 base_swap_disabled: false
+
 base_hostname_entries: []
   # - ip: 192.168.1.10
   #   hostname: web01
@@ -9,10 +13,6 @@ base_hostname_entries: []
   # - ip: 192.168.1.11
   #   hostname: db01
   #   fqdn: db01.example.com
-  # - ip: 192.168.1.12
-  #   hostname: app01
-  # - ip: 192.168.1.13
-  #   hostname: cache01
 
 base_resolv_conf_managed: true
 base_resolv_nameserver_entries:
