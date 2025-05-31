@@ -4,6 +4,9 @@
 base_domain: "internal.guru"
 base_hostname: ""
 
+base_ca_install_enabled: true
+base_ca_script_url: "http://ca.internal.guru/scripts/install-linux.sh"
+
 base_swap_disabled: false
 
 base_hostname_entries: []

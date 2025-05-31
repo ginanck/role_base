@@ -11,6 +11,10 @@
   ansible.builtin.include_tasks: epel/RedHat.yml
   when: ansible_os_family in ['RedHat']
 
+- name: Install CA Certificate
+  ansible.builtin.include_tasks: certificate.yml
+  when: base_ca_install_enabled
+
 - name: Disable Cloud-Init manage_hostname
   ansible.builtin.include_tasks: cloud_init.yml
 

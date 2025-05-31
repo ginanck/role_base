@@ -1,0 +1,13 @@
+---
+
+- name: Download and execute CA certificate installation script
+  ansible.builtin.shell: |
+    curl -fsSL http://ca.internal.guru/scripts/install-linux.sh | bash
+  become: true
+  changed_when: true
+  register: cert_install_result
+
+- name: Display certificate installation output
+  ansible.builtin.debug:
+    var: cert_install_result.stdout_lines
+  when: cert_install_result.stdout_lines is defined
