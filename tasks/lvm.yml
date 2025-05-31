@@ -26,14 +26,26 @@
   loop_control:
     label: "{{ item.name }}"
 
+- name: Check if filesystem exists
+  ansible.builtin.command: blkid /dev/{{ disk.vg }}/{{ item.name }}
+  register: filesystem_check
+  failed_when: false
+  changed_when: false
+  loop: "{{ disk.lv }}"
+  loop_control:
+    label: "{{ item.name }}"
+
 - name: Make Filesystem
   community.general.filesystem:
     fstype: xfs
     dev: /dev/{{ disk.vg }}/{{ item.name }}
-    force: no
+    force: false
+    state: present
   loop: "{{ disk.lv }}"
   loop_control:
     label: "{{ item.name }}"
+    index_var: loop_index
+  when: filesystem_check.results[loop_index].rc != 0
 
 - name: Create mount point directories
   ansible.builtin.file:
