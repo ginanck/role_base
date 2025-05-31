@@ -73,7 +73,6 @@ base_chrony_keys: []
 
 base_lvm_disks: []
   # - pv: /dev/vdb
-  #   pv_extend: false
   #   vg: data
   #   lv:
   #     - name: jenkins
@@ -85,7 +84,6 @@ base_lvm_disks: []
   #       path: /data/log
 
   # - pvs: /dev/vdc
-  #   pv_extend: true
   #   vgs: log
   #   lvs:
   #     - name: log1
