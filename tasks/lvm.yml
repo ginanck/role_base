@@ -1,7 +1,16 @@
 ---
 
+- name: Detect disk type (partition vs whole disk)
+  ansible.builtin.set_fact:
+    is_partition: "{{ disk.pv | regex_search('[0-9]+$') != none }}"
+
+- name: Extend partition-based disk
+  ansible.builtin.include_tasks: grow-partition.yml
+  when: is_partition
+
 - name: Create a Volume Group
   community.general.lvg:
+    pvresize: true
     pvs: "{{ disk.pv }}"
     vg: "{{ disk.vg }}"
     state: present
@@ -11,15 +20,17 @@
     vg: "{{ disk.vg }}"
     lv: "{{ item.name }}"
     size: "{{ item.size }}"
-    resizefs: yes
+    shrink: no
+    resizefs: true
   loop: "{{ disk.lv }}"
   loop_control:
     label: "{{ item.name }}"
 
 - name: Make Filesystem
-  ansible.builtin.filesystem:
+  community.general.filesystem:
     fstype: xfs
     dev: /dev/{{ disk.vg }}/{{ item.name }}
+    force: no
   loop: "{{ disk.lv }}"
   loop_control:
     label: "{{ item.name }}"

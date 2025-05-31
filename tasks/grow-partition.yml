@@ -1,0 +1,17 @@
+---
+
+- name: Extract base disk and partition number for partitioned disks
+  ansible.builtin.set_fact:
+    base_disk: "{{ disk.pv | regex_replace('([0-9]+)$', '') }}"
+    partition_num: "{{ disk.pv | regex_search('[0-9]+$') }}"
+
+- name: Check if partition needs to grow (dry-run)
+  ansible.builtin.command: growpart --dry-run {{ base_disk }} {{ partition_num }}
+  register: growpart_check
+  changed_when: false
+  failed_when: false
+
+- name: Grow partition only if needed
+  ansible.builtin.command: growpart {{ base_disk }} {{ partition_num }}
+  when: growpart_check.rc == 0
+  register: partition_grown
