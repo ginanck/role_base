@@ -1,5 +1,6 @@
 ---
 
+# Mise Install: https://mise.jdx.dev/installing-mise.html
 - name: Create /opt/bin directory if it doesn't exist
   ansible.builtin.file:
     path: /opt/bin
