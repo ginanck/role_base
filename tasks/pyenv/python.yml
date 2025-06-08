@@ -1,0 +1,61 @@
+---
+# Python version management with PyEnv
+
+- name: Install requested Python versions for users
+  ansible.builtin.shell: |
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    if command -v pyenv 1>/dev/null 2>&1; then
+      eval "$(pyenv init --path)"
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+    fi
+    pyenv install -s {{ item.1.version }}
+  become: true
+  become_user: "{{ item.0.username }}"
+  with_nested:
+    - "{{ base_pyenv_python_users | default([]) }}"
+    - "{{ item.0.python_versions | default([]) }}"
+  loop_control:
+    loop_var: item
+    label: "{{ item.0.username }}: {{ item.1.version }}"
+  register: python_install
+  changed_when: python_install.stdout is not search('already installed')
+  when: item.0.python_versions is defined and (item.1.state | default('present')) == 'present'
+
+- name: Uninstall Python versions marked for removal
+  ansible.builtin.shell: |
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    if command -v pyenv 1>/dev/null 2>&1; then
+      eval "$(pyenv init --path)"
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+    fi
+    pyenv uninstall -f {{ item.1.version }}
+  become: true
+  become_user: "{{ item.0.username }}"
+  with_nested:
+    - "{{ base_pyenv_python_users | default([]) }}"
+    - "{{ item.0.python_versions | default([]) }}"
+  loop_control:
+    loop_var: item
+    label: "{{ item.0.username }}: {{ item.1.version }}"
+  when: item.0.python_versions is defined and item.1.state is defined and item.1.state == 'absent'
+
+- name: Set global Python version for users
+  ansible.builtin.shell: >
+    pyenv global {{ item.default_python | default(item.python_versions[0].version) 
+    if item.python_versions is defined and item.python_versions|length > 0 
+    else 'system' }}
+  become: true
+  become_user: "{{ item.username }}"
+  loop: "{{ base_pyenv_python_users | default([]) }}"
+  loop_control:
+    loop_var: item
+    label: "{{ item.username }}"
+  when: >
+    item.python_versions is defined and (
+      item.python_versions|selectattr('state', 'undefined')|list|length > 0 or 
+      item.python_versions|selectattr('state', 'equalto', 'present')|list|length > 0
+    )

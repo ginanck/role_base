@@ -1,0 +1,33 @@
+# {{ ansible_managed }}
+
+# Base Python packages
+{% if base_packages | length > 0 %}
+# Base packages from base_pyenv_pip_packages
+{% for package in base_packages %}
+{{ package }}
+{% endfor %}
+{% endif %}
+
+# Additional Python packages
+{% if additional_packages | length > 0 %}
+# Additional packages from base_pyenv_pip_packages_additional
+{% for package in additional_packages %}
+{{ package }}
+{% endfor %}
+{% endif %}
+
+# User-specific Python packages
+{% if user_packages | length > 0 %}
+# User-specific packages from user configuration and base_pyenv_pip_packages_user_specific
+{% for package in user_packages %}
+{{ package }}
+{% endfor %}
+{% endif %}
+
+# Virtualenv-specific packages
+{% if specific_packages | length > 0 %}
+# Packages specific to this virtualenv
+{% for package in specific_packages %}
+{{ package }}
+{% endfor %}
+{% endif %}

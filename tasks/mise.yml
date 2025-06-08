@@ -52,3 +52,31 @@
   become_user: "{{ item.become_user }}"
   ignore_errors: "{{ item.ignore_errors }}"
   loop: "{{ all_mise_users }}"
+
+- name: Create mise config directory for each user
+  ansible.builtin.file:
+    path: "{{ item.home }}/.config/mise"
+    state: directory
+    mode: '0775'
+    owner: "{{ item.username }}"
+    group: "{{ item.groupname | default(item.username) }}"
+  become: true
+  loop: "{{ all_mise_users }}"
+
+- name: Deploy mise configuration file for each user
+  ansible.builtin.template:
+    src: mise_config.toml.j2
+    dest: "{{ item.home }}/.config/mise/config.toml"
+    mode: '0644'
+    owner: "{{ item.username }}"
+    group: "{{ item.groupname | default(item.username) }}"
+  become: true
+  loop: "{{ all_mise_users }}"
+
+- name: Install defined tools for each user
+  ansible.builtin.command: /opt/bin/mise install
+  become: true
+  become_user: "{{ item.become_user }}"
+  ignore_errors: "{{ item.ignore_errors }}"
+  changed_when: false
+  loop: "{{ all_mise_users }}"

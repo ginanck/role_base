@@ -1,0 +1,81 @@
+---
+# PyEnv installation and configuration
+
+- name: Check if pyenv is available for users
+  ansible.builtin.shell: |
+    if [ -x "$HOME/.pyenv/bin/pyenv" ]; then
+      echo "present"
+    else
+      echo "absent"
+    fi
+  become: true
+  become_user: "{{ item.username }}"
+  register: pyenv_check
+  changed_when: false
+  loop: "{{ base_pyenv_python_users }}"
+  loop_control:
+    label: "{{ item.username }}"
+
+- name: Display pyenv check results
+  ansible.builtin.debug:
+    msg: "PyEnv status for {{ item.item.username }}: {{ item.stdout }}"
+  loop: "{{ pyenv_check.results }}"
+  loop_control:
+    label: "{{ item.item.username }}"
+
+- name: Install build dependencies for pyenv
+  ansible.builtin.package:
+    name: "{{ base_pyenv_build_dependencies }}"
+    state: present
+  become: true
+
+- name: Install pyenv for users that don't have it yet
+  ansible.builtin.shell: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+  become: true
+  become_user: "{{ item.item.username }}"
+  loop: "{{ pyenv_check.results | selectattr('stdout', 'equalto', 'absent') | list }}"
+  loop_control:
+    label: "{{ item.item.username }}"
+  when: item.stdout == 'absent'
+  register: pyenv_install_result
+
+- name: Get user home directories
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ item.item.username }}"
+  register: user_info
+  loop: "{{ pyenv_check.results | selectattr('stdout', 'equalto', 'absent') | list }}"
+  loop_control:
+    label: "{{ item.item.username }}"
+  when: item.stdout == 'absent'
+
+- name: Set user home directory facts
+  ansible.builtin.set_fact:
+    user_homes: "{{ user_homes | default({}) | combine({item.item.item.username: item.getent_passwd[0].split(':')[5]}) }}"
+  loop: "{{ user_info.results }}"
+  loop_control:
+    label: "{{ item.item.item.username }}"
+  when: item.getent_passwd is defined
+
+- name: Configure pyenv in user's .bashrc file
+  ansible.builtin.blockinfile:
+    path: "{{ user_homes[item.item.username] }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - PYENV"
+    block: |
+      export PYENV_ROOT="$HOME/.pyenv"
+      export PATH="$PYENV_ROOT/bin:$PATH"
+      if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
+      fi
+    state: present
+    create: yes
+    mode: '0644'
+    owner: "{{ item.item.username }}"
+    group: "{{ item.item.username }}"
+  become: true
+  loop: "{{ pyenv_check.results | selectattr('stdout', 'equalto', 'absent') | list }}"
+  loop_control:
+    label: "{{ item.item.username }}"
+  when: item.stdout == 'absent' and user_homes[item.item.username] is defined

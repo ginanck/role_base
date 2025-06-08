@@ -1,0 +1,52 @@
+---
+# Requirements file management for Python virtualenvs
+
+- name: Create requirements files in default location
+  ansible.builtin.template:
+    src: requirements.txt.j2
+    dest: "{{ pyenv_user_homes[item.0.username] }}/{{ item.1.name }}_requirements.txt"
+    owner: "{{ item.0.username }}"
+    group: "{{ item.0.username }}"
+    mode: '0644'
+  become: true
+  with_subelements:
+    - "{{ base_pyenv_python_users | default([]) }}"
+    - virtualenvs
+    - skip_missing: true
+  loop_control:
+    loop_var: item
+    label: "{{ item.0.username }}: {{ item.1.name }}"
+  when: >
+    (item.1.state | default('present')) == 'present' and 
+    item.1.requirements_file is not defined and
+    (item.1.packages is defined or base_pyenv_pip_packages is defined or base_pyenv_pip_additional_packages is defined)
+  vars:
+    specific_packages: "{{ item.1.packages | default([]) }}"
+    base_packages: "{{ base_pyenv_pip_packages | default([]) }}"
+    additional_packages: "{{ base_pyenv_pip_additional_packages | default([]) }}"
+    default_packages: "{{ item.0.default_packages | default([]) }}"
+
+- name: Create requirements files in custom locations
+  ansible.builtin.template:
+    src: requirements.txt.j2
+    dest: "{{ item.1.requirements_file }}"
+    owner: "{{ item.0.username }}"
+    group: "{{ item.0.username }}"
+    mode: '0644'
+  become: true
+  with_subelements:
+    - "{{ base_pyenv_python_users | default([]) }}"
+    - virtualenvs
+    - skip_missing: true
+  loop_control:
+    loop_var: item
+    label: "{{ item.0.username }}: {{ item.1.name }}"
+  when: >
+    (item.1.state | default('present')) == 'present' and 
+    item.1.requirements_file is defined and
+    (item.1.packages is defined or base_pyenv_pip_packages is defined or base_pyenv_pip_additional_packages is defined)
+  vars:
+    specific_packages: "{{ item.1.packages | default([]) }}"
+    base_packages: "{{ base_pyenv_pip_packages | default([]) }}"
+    additional_packages: "{{ base_pyenv_pip_additional_packages | default([]) }}"
+    default_packages: "{{ item.0.default_packages | default([]) }}"
