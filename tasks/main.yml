@@ -50,3 +50,7 @@
   loop_control:
     loop_var: disk
     label: "{{ disk.pv }}"
+
+- name: Setup Mise
+  ansible.builtin.include_tasks: mise.yml
+  when: base_mise_setup_enabled

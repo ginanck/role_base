@@ -100,3 +100,20 @@ base_lvm_disks: []
   #     - name: log3
   #       size: 100%FREE
   #       path: /opt/log3
+
+base_mise_setup_enabled: false
+base_mise_users:
+  - username: root
+    home: /root
+    become_user: root
+    ignore_errors: true
+
+base_mise_additional_users: []
+  # - username: webuser
+  #   home: /home/webuser
+  #   become_user: webuser
+  #   ignore_errors: true
+  # - username: deploy
+  #   home: /home/deploy
+  #   become_user: deploy
+  #   ignore_errors: true
