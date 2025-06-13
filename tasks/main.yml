@@ -17,6 +17,7 @@
 
 - name: Disable Cloud-Init manage_hostname
   ansible.builtin.include_tasks: cloud_init.yml
+  when: base_configure_cloud_init
 
 - name: Setup resolve.conf
   ansible.builtin.include_tasks: resolve.yml

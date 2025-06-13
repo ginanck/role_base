@@ -216,3 +216,5 @@ base_pyenv_python_users: []
   #         - pyyaml==6.0
   #         - rich==13.3.5
   #         - httpx==0.24.0
+
+base_configure_cloud_init: true
