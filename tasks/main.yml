@@ -51,11 +51,3 @@
   loop_control:
     loop_var: disk
     label: "{{ disk.pv }}"
-
-- name: Setup Mise
-  ansible.builtin.include_tasks: mise.yml
-  when: base_mise_setup_enabled
-
-- name: Setup Pyenv
-  ansible.builtin.include_tasks: pyenv.yml
-  when: base_pyenv_setup_enabled
