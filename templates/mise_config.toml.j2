@@ -1,8 +1,0 @@
-[tools]
-{% set mise_tools = base_mise_tools.items() %}
-{% for tool, version in mise_tools %}
-{{ tool }} = "{{ version }}"
-{% endfor %}
-
-[settings]
-experimental = {{ base_mise_experimental_enabled | lower }}
