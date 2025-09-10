@@ -88,6 +88,9 @@ jobs:
             flake8 .
           fi
 
+      - name: Install Ansible community.docker collection
+        run: ansible-galaxy collection install community.docker --force
+
       - name: Run Molecule tests for default scenario
         run: molecule test -s default
         env:
