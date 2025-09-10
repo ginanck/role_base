@@ -4,7 +4,7 @@ on:
   pull_request:
   push:                 # Run on push to any branch
   schedule:
-    - cron: "0 6 * * 3"
+    - cron: "0 6 * * *"
 
 jobs:
   lint:
