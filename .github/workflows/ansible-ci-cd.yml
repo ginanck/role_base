@@ -1,5 +1,5 @@
 ---
-name: lint
+name: molecule-ci
 on:
   pull_request:
   push:                 # Run on push to any branch
@@ -11,11 +11,11 @@ defaults:
     working-directory: 'role_base'
 
 jobs:
-  lint:
-    name: lint
+  ansible-ci:
+    name: Lint and Molecule
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the codebase.
+      - name: Check out the codebase
         uses: actions/checkout@v4
         with:
           path: 'role_base'
@@ -41,7 +41,7 @@ jobs:
             pip3 install -r ../hooks_molecule/requirements.txt
           else
             echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8
+            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
           fi
 
       - name: ansible-lint
@@ -85,3 +85,10 @@ jobs:
             echo "No configuration found, running with defaults"
             flake8 .
           fi
+
+      - name: Run Molecule tests for default scenario
+        run: molecule test -s default
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          ROLE_NAME: 'role-base'
