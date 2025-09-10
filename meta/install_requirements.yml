@@ -8,9 +8,6 @@ collections:
   - name: community.general
     version: 6.6.1
 
-  - name: community.docker
-    version: 4.7.0
-
   # https://galaxy.ansible.com/ui/repo/published/ansible/posix/docs/
   # https://galaxy.ansible.com/ui/repo/published/ansible/posix/docs/
   # https://github.com/ansible-collections/ansible.posix
