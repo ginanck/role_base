@@ -1,5 +1,5 @@
 ---
-name: molecule-ci
+name: ansible-ci
 on:
   pull_request:
   push:                 # Run on push to any branch
@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   ansible-ci:
-    name: Lint and Molecule
+    name: molecule
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codebase
@@ -28,10 +28,10 @@ jobs:
           path: 'hooks_molecule'
           token: '${{ secrets.HOOKS_TOKEN }}'
 
-      - name: Set up Python 3.8.18
+      - name: Set up Python 3.9.23
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8.18'
+          python-version: '3.9.23'
 
       - name: Install test dependencies from hooks repository
         run: |
