@@ -6,7 +6,11 @@
 # ::1       localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 # Current node hostname
+{% if ansible_default_ipv4 is defined and ansible_default_ipv4.address is defined %}
 {{ ansible_default_ipv4.address }} {{ base_hostname }} {{ base_hostname }}.{{ base_domain }}
+{% else %}
+127.0.1.1 {{ base_hostname }} {{ base_hostname }}.{{ base_domain }}
+{% endif %}
 
 # Additional hosts entries
 {% if base_hostname_entries is defined %}
