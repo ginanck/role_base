@@ -44,17 +44,6 @@ jobs:
             pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
           fi
 
-      - name: Show installed Python packages
-        run: pip3 list
-
-      - name: Check Docker version
-        run: docker --version
-
-      - name: Check Docker service status
-        run: |
-          systemctl is-active docker || echo "Docker not managed by systemd"
-          docker info || echo "Docker info failed"
-
       - name: ansible-lint
         run: |
           # Check for local ansible-lint config first, then fallback to hooks
@@ -101,5 +90,6 @@ jobs:
         run: molecule test -s default
         env:
           PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
           ROLE_NAME: 'role-base'
+          ANSIBLE_FORCE_COLOR: '1'
+          DOCKER_HOST: 'unix:///var/run/docker.sock'
