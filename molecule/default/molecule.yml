@@ -1,7 +1,7 @@
 ---
 dependency:
   name: shell
-  command: bash meta/install_requirements
+  command: /usr/bin/bash meta/install_requirements
 driver:
   name: docker
 platforms:
