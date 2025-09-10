@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-        with:
-          path: 'role_base'
 
       - name: Check out hooks repository
         uses: actions/checkout@v4
