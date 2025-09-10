@@ -44,6 +44,17 @@ jobs:
             pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
           fi
 
+      - name: Show installed Python packages
+        run: pip3 list
+
+      - name: Check Docker version
+        run: docker --version
+
+      - name: Check Docker service status
+        run: |
+          systemctl is-active docker || echo "Docker not managed by systemd"
+          docker info || echo "Docker info failed"
+
       - name: ansible-lint
         run: |
           # Check for local ansible-lint config first, then fallback to hooks
