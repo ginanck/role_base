@@ -90,6 +90,6 @@ jobs:
         run: molecule test -s default
         env:
           PY_COLORS: '1'
-          ROLE_NAME: 'role-base'
           ANSIBLE_FORCE_COLOR: '1'
+          ROLE_NAME: 'role_base'
           DOCKER_HOST: 'unix:///var/run/docker.sock'
