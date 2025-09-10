@@ -22,6 +22,8 @@ provisioner:
     group_vars:
       all:
         base_ca_install_enabled: false
+        base_configure_cloud_init: false
+        base_resolv_conf_managed: false
     host_vars:
       role-base-almalinux8:
         ansible_user: root
