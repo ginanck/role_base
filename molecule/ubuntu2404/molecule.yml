@@ -1,6 +1,7 @@
 ---
 dependency:
-  name: galaxy
+  name: shell
+  command: bash meta/install_requirements
 driver:
   name: docker
 platforms:
