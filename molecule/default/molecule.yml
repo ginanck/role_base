@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance
+  - name: role-base-almalinux8
     image: quay.io/almalinux/almalinux:8
     pre_build_image: true
     privileged: true
@@ -19,7 +19,7 @@ provisioner:
   name: ansible
   inventory:
     host_vars:
-      instance:
+      role-base-almalinux8:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml

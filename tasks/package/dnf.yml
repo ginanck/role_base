@@ -5,3 +5,4 @@
     name: "{{ base_default_packages + base_additional_packages + base_os_specific_packages }}"
     state: present
     update_cache: true
+    disable_gpg_check: true
