@@ -1,10 +1,10 @@
 ---
 
-- name: disable swap at runtime
+- name: Disable swap at runtime
   ansible.builtin.command: swapoff -a
   changed_when: false
 
-- name: disable swap permanently (in /etc/fstab)
+- name: Disable swap permanently (in /etc/fstab)
   ansible.builtin.replace:
     path: /etc/fstab
     regexp: '^([^#].*\sswap\s.*)$'

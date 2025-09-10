@@ -1,6 +1,6 @@
 ---
 
-- name: generate /etc/chrony.conf
+- name: Generate /etc/chrony.conf
   ansible.builtin.template:
     src: chrony.conf.j2
     dest: "/etc/chrony.conf"
@@ -11,7 +11,7 @@
   register: chrony_conf_result
   when: base_chrony_config is defined
 
-- name: generate /etc/chrony.keys
+- name: Generate /etc/chrony.keys
   ansible.builtin.template:
     src: chrony.keys.j2
     dest: "/etc/chrony.keys"
@@ -22,7 +22,7 @@
   register: chrony_keys_result
   when: base_chrony_keys is defined
 
-- name: restart chronyd
+- name: Restart chronyd
   ansible.builtin.systemd:
     name: chronyd
     state: restarted

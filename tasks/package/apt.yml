@@ -1,6 +1,6 @@
 ---
 
-- name: install prerequisites (Debian family)
+- name: Install prerequisites (Debian family)
   ansible.builtin.apt:
     name: "{{ base_default_packages + base_additional_packages + base_os_specific_packages }}"
     state: present

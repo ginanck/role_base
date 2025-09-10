@@ -1,12 +1,12 @@
 ---
 
-- name: ensure cloud-init config directory exists
+- name: Ensure cloud-init config directory exists
   ansible.builtin.file:
     path: /etc/cloud/cloud.cfg.d
     state: directory
     mode: '0755'
 
-- name: set preserve_hostname to true in cloud-init config
+- name: Set preserve_hostname to true in cloud-init config
   ansible.builtin.lineinfile:
     path: /etc/cloud/cloud.cfg
     regexp: '^preserve_hostname:'
@@ -15,7 +15,7 @@
     backup: true
   register: cloud_init_result
 
-- name: remove update_etc_hosts from cloud_init_modules
+- name: Remove update_etc_hosts from cloud_init_modules
   ansible.builtin.lineinfile:
     path: /etc/cloud/cloud.cfg
     regexp: '^(\s*)-\s*update_etc_hosts\s*$'
@@ -24,13 +24,13 @@
     state: present
   register: update_etc_hosts_result
 
-- name: restart cloud-init
+- name: Restart cloud-init
   ansible.builtin.systemd:
     name: cloud-init
     state: restarted
     enabled: true
     daemon_reload: yes
-  ignore_errors: true
+  failed_when: false
   when: >
     (cloud_init_result is defined and cloud_init_result.changed) or
     (update_etc_hosts_result is defined and update_etc_hosts_result.changed)

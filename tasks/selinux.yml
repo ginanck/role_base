@@ -2,18 +2,18 @@
 # SELinux is primarily used on RedHat-based systems, but we'll check for its presence
 # on other systems as well to make the role more robust
 
-- name: check if SELinux is available
+- name: Check if SELinux is available
   ansible.builtin.stat:
     path: /etc/selinux/config
   register: selinux_config
 
-- name: disable SELinux immediately (if installed)
+- name: Disable SELinux immediately (if installed)
   ansible.builtin.command: setenforce 0
   changed_when: false
   failed_when: false
   when: selinux_config.stat.exists
 
-- name: disable SELinux permanently (if installed)
+- name: Disable SELinux permanently (if installed)
   ansible.builtin.lineinfile:
     path: /etc/selinux/config
     regexp: '^SELINUX='
@@ -22,13 +22,13 @@
   when: selinux_config.stat.exists
 
 # For Debian/Ubuntu systems that might have AppArmor instead of SELinux
-- name: check if AppArmor is installed (Debian/Ubuntu)
+- name: Check if AppArmor is installed (Debian/Ubuntu)
   ansible.builtin.stat:
     path: /etc/init.d/apparmor
   register: apparmor_init
   when: ansible_os_family == "Debian"
 
-- name: disable AppArmor (if installed on Debian/Ubuntu)
+- name: Disable AppArmor (if installed on Debian/Ubuntu)
   ansible.builtin.service:
     name: apparmor
     state: stopped

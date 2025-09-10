@@ -1,26 +1,26 @@
 ---
 
-- name: gather os facts
+- name: Gather OS facts
   ansible.builtin.setup:
     gather_subset:
       - '!all'
       - '!min'
       - 'distribution'
 
-- name: stop and disable firewalld service
+- name: Stop and disable firewalld service
   ansible.builtin.systemd:
     name: firewalld
     state: stopped
     enabled: false
     masked: yes  # Adding masking for extra protection
-  ignore_errors: true
+  failed_when: false
   when: ansible_os_family == 'RedHat'
 
-- name: stop and disable ufw service
+- name: Stop and disable ufw service
   ansible.builtin.systemd:
     name: ufw
     state: stopped
     enabled: false
     masked: yes  # Adding masking for extra protection
-  ignore_errors: true
+  failed_when: false
   when: ansible_os_family == 'Debian'

@@ -1,11 +1,25 @@
 ---
 
-- name: Download and execute CA certificate installation script
+- name: Download CA certificate installation script
+  ansible.builtin.get_url:
+    url: http://ca.internal.guru/scripts/install-linux.sh
+    dest: /tmp/install-linux.sh
+    mode: '0755'
+  become: true
+
+- name: Execute CA certificate installation script
   ansible.builtin.shell: |
-    curl -fsSL http://ca.internal.guru/scripts/install-linux.sh | bash
+    set -o pipefail
+    /tmp/install-linux.sh
   become: true
   changed_when: true
   register: cert_install_result
+
+- name: Remove temporary installation script
+  ansible.builtin.file:
+    path: /tmp/install-linux.sh
+    state: absent
+  become: true
 
 - name: Display certificate installation output
   ansible.builtin.debug:
