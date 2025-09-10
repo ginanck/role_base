@@ -1,5 +1,5 @@
 ---
-name: ansible-ci
+name: molecule
 on:
   pull_request:
   push:                 # Run on push to any branch
@@ -11,9 +11,11 @@ defaults:
     working-directory: 'role_base'
 
 jobs:
-  ansible-ci:
+  molecule:
     name: molecule
     runs-on: ubuntu-latest
+    env:
+      DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
@@ -75,7 +77,7 @@ jobs:
       - name: flake8
         run: |
           # Check for local flake8 config first, then fallback to hooks
-          if [ -f ".flake8" ] || [ -f "setup.cfg" ] || [ -f "tox.ini" ]; then
+          if [ -f ".flake8" ] || [ -f "setup.cfg" ]; then
             echo "Using local flake8 configuration"
             flake8 .
           elif [ -f "../hooks_molecule/flake8.conf" ]; then
@@ -92,4 +94,3 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           ROLE_NAME: 'role_base'
-          DOCKER_HOST: 'unix:///var/run/docker.sock'

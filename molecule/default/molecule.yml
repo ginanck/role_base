@@ -15,12 +15,14 @@ platforms:
     tmpfs:
       - /run
       - /tmp
-    dockerfile: ../resources/Dockerfile.almalinux.j2
 provisioner:
   name: ansible
   inventory:
     host_vars:
       instance:
         ansible_user: root
+  playbooks:
+    converge: ../../resources/converge.yml
 verifier:
   name: ansible
+  playbook: ../../resources/verify.yml
