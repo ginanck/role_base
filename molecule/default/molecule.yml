@@ -23,7 +23,7 @@ provisioner:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
-  variables:
+  vars:
     base_ca_install_enabled: false
 verifier:
   name: ansible
