@@ -1,0 +1,58 @@
+---
+name: molecule
+on:
+  workflow_run:
+    workflows: ["lint"]
+    types: [completed]  # Run when lint completes on any branch
+  pull_request:         # For PRs, we still want molecule to run, but it will wait for lint
+  schedule:
+    - cron: "0 6 * * 3"
+
+defaults:
+  run:
+    working-directory: 'role_base'
+
+jobs:
+  molecule:
+    name: molecule
+    runs-on: ubuntu-latest
+    # Only run if lint workflow succeeded (for workflow_run trigger)
+    # or if it's a PR/schedule event
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+        with:
+          path: 'role_base'
+
+      - name: Check out hooks repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'ginanck/hooks_molecule'
+          path: 'hooks_molecule'
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install test dependencies from hooks repository
+        run: |
+          # Check if hooks repository has requirements file
+          if [ -f "../hooks_molecule/requirements.txt" ]; then
+            echo "Installing dependencies from hooks_molecule/requirements.txt"
+            pip3 install -r ../hooks_molecule/requirements.txt
+          else
+            echo "No requirements.txt found in hooks repository, installing default dependencies"
+            pip3 install ansible molecule[docker] docker
+          fi
+
+      - name: Run Molecule tests for default scenario
+        run: molecule test -s default
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          ROLE_NAME: 'role-base'
