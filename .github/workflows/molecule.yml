@@ -36,10 +36,10 @@ jobs:
           path: 'hooks_molecule'
           token: '${{ secrets.HOOKS_TOKEN }}'
 
-      - name: Set up Python 3.8.20
+      - name: Set up Python 3.8.18
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8.20'
+          python-version: '3.8.18'
 
       - name: Install test dependencies from hooks repository
         run: |
