@@ -27,3 +27,16 @@ verifier:
   name: ansible
   options:
     playbook: ../../resources/verify.yml
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
