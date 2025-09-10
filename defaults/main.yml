@@ -1,5 +1,6 @@
 ---
 # defaults file for role_base
+base_molecule_skip: false
 
 base_domain: "internal.guru"
 base_hostname: ""

@@ -23,6 +23,8 @@ provisioner:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
+  variables:
+    role_base_molecule_skip: true
 verifier:
   name: ansible
   options:
