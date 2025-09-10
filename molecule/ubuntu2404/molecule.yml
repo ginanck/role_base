@@ -5,26 +5,28 @@ driver:
   name: docker
 platforms:
   - name: role-base-ubuntu2404
-    image: ubuntu/systemd:24.04
+    image: geerlingguy/docker-ubuntu2404-ansible:latest
     pre_build_image: true
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     cgroupns_mode: host
-    command: /sbin/init
+    command: /lib/systemd/systemd
     tmpfs:
       - /run
       - /tmp
+      - /run/lock
 provisioner:
   name: ansible
   inventory:
+    group_vars:
+      all:
+        base_ca_install_enabled: false
     host_vars:
       role-base-ubuntu2404:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
-  vars:
-    base_ca_install_enabled: false
 verifier:
   name: ansible
   options:

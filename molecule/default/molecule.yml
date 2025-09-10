@@ -15,16 +15,18 @@ platforms:
     tmpfs:
       - /run
       - /tmp
+      - /run/lock
 provisioner:
   name: ansible
   inventory:
+    group_vars:
+      all:
+        base_ca_install_enabled: false
     host_vars:
       role-base-almalinux8:
         ansible_user: root
   playbooks:
     converge: ../resources/converge.yml
-  vars:
-    base_ca_install_enabled: false
 verifier:
   name: ansible
   options:
