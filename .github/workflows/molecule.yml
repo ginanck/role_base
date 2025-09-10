@@ -120,8 +120,8 @@ jobs:
             pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
           fi
 
-      - name: Install Ansible community.docker collection
-        run: ansible-galaxy collection install community.docker --force
+      - name: Install ansible dependencies
+        run: bash meta/install_requirements.sh
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: molecule test -s ${{ matrix.scenario }}

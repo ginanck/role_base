@@ -24,6 +24,7 @@ provisioner:
         base_ca_install_enabled: false
         base_configure_cloud_init: false
         base_resolv_conf_managed: false
+        base_hostname_configured: false
     host_vars:
       role-base-ubuntu2404:
         ansible_user: root

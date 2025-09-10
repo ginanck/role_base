@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ansible-galaxy role install \
+    -r meta/install_requirements.yml \
+    -p roles/ \
+    --force
+
+ansible-galaxy collection install \
+    -r meta/install_requirements.yml \
+    -p collections/ \
+    --force

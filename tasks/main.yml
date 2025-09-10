@@ -25,6 +25,7 @@
 
 - name: Setup Hostname of the Nodes
   ansible.builtin.include_tasks: hostname.yml
+  when: base_hostname_configured
 
 - name: Setup Hosts
   ansible.builtin.include_tasks: hosts.yml
