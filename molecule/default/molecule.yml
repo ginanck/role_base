@@ -25,4 +25,5 @@ provisioner:
     converge: ../../resources/converge.yml
 verifier:
   name: ansible
-  playbook: ../../resources/verify.yml
+  options:
+    playbook: ../../resources/verify.yml
