@@ -27,6 +27,7 @@ provisioner:
     host_vars:
       role-base-almalinux8:
         ansible_user: root
+        base_hostname: "almalinux-8"
   playbooks:
     converge: ../resources/converge.yml
 verifier:

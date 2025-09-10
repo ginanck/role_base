@@ -27,6 +27,7 @@ provisioner:
     host_vars:
       role-base-ubuntu2404:
         ansible_user: root
+        base_hostname: "ubuntu-2404"
   playbooks:
     converge: ../resources/converge.yml
 verifier:
