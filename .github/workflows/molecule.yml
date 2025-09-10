@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-        with:
-          path: role_base
 
       - name: Check out hooks repository
         uses: actions/checkout@v4
@@ -34,9 +32,9 @@ jobs:
       - name: Install test dependencies from hooks repository
         run: |
           # Check if hooks repository has requirements file
-          if [ -f "../hooks_molecule/requirements.txt" ]; then
+          if [ -f "hooks_molecule/requirements.txt" ]; then
             echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r ../hooks_molecule/requirements.txt
+            pip3 install -r hooks_molecule/requirements.txt
           else
             echo "No requirements.txt found in hooks repository, installing default dependencies"
             pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
@@ -48,9 +46,9 @@ jobs:
           if [ -f ".ansible-lint" ]; then
             echo "Using local .ansible-lint configuration"
             ansible-lint .
-          elif [ -f "../hooks_molecule/ansible-lint.conf" ]; then
+          elif [ -f "hooks_molecule/ansible-lint.conf" ]; then
             echo "Using external ansible-lint configuration"
-            ansible-lint -c ../hooks_molecule/ansible-lint.conf .
+            ansible-lint -c hooks_molecule/ansible-lint.conf .
           else
             echo "No configuration found, running with defaults"
             ansible-lint .
@@ -62,9 +60,9 @@ jobs:
           if [ -f ".yamllint" ] || [ -f ".yamllint.yml" ] || [ -f ".yamllint.yaml" ]; then
             echo "Using local yamllint configuration"
             yamllint .
-          elif [ -f "../hooks_molecule/yamllint.conf" ]; then
+          elif [ -f "hooks_molecule/yamllint.conf" ]; then
             echo "Using external yamllint configuration"
-            yamllint -c ../hooks_molecule/yamllint.conf .
+            yamllint -c hooks_molecule/yamllint.conf .
           else
             echo "No configuration found, running with defaults"
             yamllint .
@@ -76,9 +74,9 @@ jobs:
           if [ -f ".flake8" ] || [ -f "setup.cfg" ]; then
             echo "Using local flake8 configuration"
             flake8 .
-          elif [ -f "../hooks_molecule/flake8.conf" ]; then
+          elif [ -f "hooks_molecule/flake8.conf" ]; then
             echo "Using external flake8 configuration"
-            flake8 --config=../hooks_molecule/flake8.conf .
+            flake8 --config=hooks_molecule/flake8.conf .
           else
             echo "No configuration found, running with defaults"
             flake8 .
@@ -88,9 +86,7 @@ jobs:
         run: ansible-galaxy collection install community.docker --force
 
       - name: Run Molecule tests for default scenario
-        working-directory: role_base
         run: molecule test -s default
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          ROLE_NAME: 'role_base'

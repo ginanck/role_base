@@ -22,11 +22,11 @@ provisioner:
       instance:
         ansible_user: root
   playbooks:
-    converge: ../../resources/converge.yml
+    converge: ../resources/converge.yml
 verifier:
   name: ansible
   options:
-    playbook: ../../resources/verify.yml
+    playbook: ../resources/verify.yml
 scenario:
   test_sequence:
     - dependency
