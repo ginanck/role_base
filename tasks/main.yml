@@ -13,7 +13,7 @@
 
 - name: Install CA Certificate
   ansible.builtin.include_tasks: certificate.yml
-  when: base_ca_install_enabled and not base_molecule_skip
+  when: base_ca_install_enabled
 
 - name: Disable Cloud-Init manage_hostname
   ansible.builtin.include_tasks: cloud_init.yml

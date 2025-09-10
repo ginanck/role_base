@@ -24,7 +24,7 @@ provisioner:
   playbooks:
     converge: ../resources/converge.yml
   variables:
-    role_base_molecule_skip: true
+    base_ca_install_enabled: false
 verifier:
   name: ansible
   options:
