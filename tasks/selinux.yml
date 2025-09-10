@@ -33,6 +33,6 @@
     name: apparmor
     state: stopped
     enabled: false
-  when: 
+  when:
     - ansible_os_family == "Debian"
     - apparmor_init.stat.exists

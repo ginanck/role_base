@@ -10,18 +10,18 @@ base_os_specific_packages:
 
 base_pyenv_build_dependencies:
   - make
-  - gcc 
-  - patch 
-  - zlib-devel 
-  - bzip2 
-  - bzip2-devel 
-  - readline-devel 
-  - sqlite 
-  - sqlite-devel 
-  - openssl-devel 
-  - tk-devel 
-  - libffi-devel 
-  - xz-devel 
-  - libuuid-devel 
-  - gdbm-libs 
+  - gcc
+  - patch
+  - zlib-devel
+  - bzip2
+  - bzip2-devel
+  - readline-devel
+  - sqlite
+  - sqlite-devel
+  - openssl-devel
+  - tk-devel
+  - libffi-devel
+  - xz-devel
+  - libuuid-devel
+  - gdbm-libs
   - libnsl2
