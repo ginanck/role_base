@@ -17,7 +17,7 @@ jobs:
       image: ghcr.io/ginanck/molecule-ubuntu:22.04
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.HOOKS_TOKEN }}
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
       image: ghcr.io/ginanck/molecule-ubuntu:22.04
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.HOOKS_TOKEN }}
     needs: lint
     strategy:
       fail-fast: false
