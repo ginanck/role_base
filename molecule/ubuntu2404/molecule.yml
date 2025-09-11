@@ -8,7 +8,7 @@ driver:
   name: docker
 platforms:
   - name: role-base-ubuntu2404
-    image: ghcr.io/ginanck/molecule-ubuntu:22.04
+    image: ghcr.io/ginanck/molecule-ubuntu:24.04
     pre_build_image: true
     privileged: true
     volumes:
