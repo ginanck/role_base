@@ -21,8 +21,8 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      collections_paths: ./collections
-      roles_path: ./roles
+      collections_paths: ../../collections
+      roles_path: ../../roles
   inventory:
     host_vars:
       role-base-ubuntu2404:
