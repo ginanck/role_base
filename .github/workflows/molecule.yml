@@ -21,22 +21,6 @@ jobs:
           path: hooks_molecule
           token: '${{ secrets.HOOKS_TOKEN }}'
 
-      - name: Set up Python 3.9.23
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9.23'
-
-      - name: Install test dependencies from hooks repository
-        run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
-          else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
-          fi
-
       - name: ansible-lint
         run: |
           # Check for local ansible-lint config first, then fallback to hooks
@@ -102,22 +86,6 @@ jobs:
           ref: 'master'
           path: hooks_molecule
           token: '${{ secrets.HOOKS_TOKEN }}'
-
-      - name: Set up Python 3.9.23
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9.23'
-
-      - name: Install test dependencies from hooks repository
-        run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
-          else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
-          fi
 
       - name: Install Ansible community.docker collection
         run: ansible-galaxy collection install community.docker:4.7.0 --force
