@@ -7,8 +7,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-ubuntu2404
-    image: ghcr.io/ginanck/molecule-ubuntu:24.04
+  - name: role-base-ubuntu2204
+    image: ghcr.io/ginanck/molecule-ubuntu:22.04
     pre_build_image: true
     privileged: true
     volumes:
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATHS: ../../collections
   inventory:
     host_vars:
-      role-base-ubuntu2404:
+      role-base-ubuntu2204:
         ansible_user: root
-        base_hostname: "role-base-ubuntu2404"
+        base_hostname: "role-base-ubuntu2204"
   playbooks:
     converge: ../resources/converge.yml
 verifier:
