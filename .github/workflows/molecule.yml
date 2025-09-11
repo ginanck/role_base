@@ -72,13 +72,15 @@ jobs:
   molecule:
     name: Molecule
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ginanck/molecule-ubuntu:22.04
     needs: lint
     strategy:
       fail-fast: false
       matrix:
         scenario:
           - default
-          - ubuntu2404
+          - ubuntu2204
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
