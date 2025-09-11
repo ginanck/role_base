@@ -8,7 +8,7 @@ driver:
   name: docker
 platforms:
   - name: role-base-almalinux8
-    image: ghcr.io/ginanck/molecule-almalinux:8
+    image: ghcr.io/ginanck/molecule-almalinux:9
     pre_build_image: true
     privileged: true
     volumes:
