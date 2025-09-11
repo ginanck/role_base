@@ -1,7 +1,9 @@
 ---
 dependency:
   name: shell
-  command: /usr/bin/bash meta/install_requirements
+  command: |
+    ansible-galaxy role install -r meta/install_requirements.yml -p ./roles --force
+    ansible-galaxy collection install -r meta/install_requirements.yml -p ./collections --force
 driver:
   name: docker
 platforms:
@@ -19,10 +21,9 @@ platforms:
       - /run/lock
 provisioner:
   name: ansible
-  config_options:
-    defaults:
-      collections_paths: ../../collections
-      roles_path: ../../roles
+  env:
+    ANSIBLE_ROLES_PATH: ../../roles:../../../
+    ANSIBLE_COLLECTIONS_PATHS: ../../collections
   inventory:
     host_vars:
       role-base-ubuntu2404:
