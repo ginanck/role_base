@@ -14,7 +14,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ginanck/molecule-ubuntu:22.04
+      image: ghcr.io/ginanck/molecule-ubuntu:24.04
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
@@ -72,8 +72,6 @@ jobs:
   molecule:
     name: Molecule
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/ginanck/molecule-ubuntu:22.04
     needs: lint
     strategy:
       fail-fast: false
