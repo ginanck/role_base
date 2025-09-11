@@ -1,7 +1,9 @@
 galaxy_info:
   author: gkorkmaz
   description: role_base to configure base settings
-  company: your company (optional)
+
+  namespace: core
+  role_name: role_base
 
   license: license (GPL-2.0-or-later, MIT, etc)
   min_ansible_version: "2.9"
