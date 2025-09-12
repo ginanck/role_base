@@ -23,7 +23,7 @@
       - tree
       - curl
       - wget
-    
+
     # Configure hostname
     base_hostname: "{{ inventory_hostname }}"
 
