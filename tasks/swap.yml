@@ -9,5 +9,5 @@
     path: /etc/fstab
     regexp: '^([^#].*\sswap\s.*)$'
     replace: '# \1'
-    backup: yes
+    backup: true
   register: fstab_swap_disabled

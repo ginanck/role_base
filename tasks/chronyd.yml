@@ -27,7 +27,7 @@
     name: chronyd
     state: restarted
     enabled: true
-    daemon_reload: yes
+    daemon_reload: true
   when: >
     (chrony_conf_result is defined and chrony_conf_result.changed) or
     (chrony_keys_result is defined and chrony_keys_result.changed)

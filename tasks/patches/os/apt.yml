@@ -18,7 +18,7 @@
 - name: Hold kernel packages to exclude from updates
   ansible.builtin.command: apt-mark hold {{ item }}
   loop: "{{ installed_kernel_packages.stdout_lines | default([]) }}"
-  when: 
+  when:
     - installed_kernel_packages.stdout_lines is defined
     - installed_kernel_packages.stdout_lines | length > 0
   changed_when: true
@@ -34,7 +34,7 @@
 - name: Unhold kernel packages after updates
   ansible.builtin.command: apt-mark unhold {{ item }}
   loop: "{{ installed_kernel_packages.stdout_lines | default([]) }}"
-  when: 
+  when:
     - installed_kernel_packages.stdout_lines is defined
     - installed_kernel_packages.stdout_lines | length > 0
   changed_when: true
