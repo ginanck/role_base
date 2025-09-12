@@ -1,0 +1,15 @@
+# Ubuntu Security Updates Only
+# This file contains only security update sources for Ubuntu
+
+# Security updates
+deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted universe multiverse
+deb-src http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted universe multiverse
+
+{% if ansible_distribution_version is version('18.04', '>=') %}
+# Extended Security Maintenance (ESM) - if available
+# deb https://esm.ubuntu.com/ubuntu {{ ansible_distribution_release }}-infra-security main restricted
+# deb https://esm.ubuntu.com/ubuntu {{ ansible_distribution_release }}-apps-security main universe multiverse
+{% endif %}
+
+# Alternative security mirror (uncomment if needed)
+# deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted universe multiverse

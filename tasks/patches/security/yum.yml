@@ -1,0 +1,14 @@
+---
+# Apply security patches/updates for RHEL/CentOS (yum)
+
+- name: Update package cache (yum)
+  ansible.builtin.yum:
+    update_cache: true
+
+- name: Apply security updates only (yum)
+  ansible.builtin.yum:
+    name: '*'
+    state: latest  # noqa package-latest
+    update_cache: true
+    security: true
+  register: yum_security_update_result

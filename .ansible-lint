@@ -1,0 +1,15 @@
+# Ansible-lint configuration for role_base
+---
+# Configuration for OS patch management tasks where 'latest' is intentional
+
+# Use built-in rules from the moderate profile
+profile: moderate
+
+# Enable offline mode for CI/CD environments
+offline: false
+
+# Skip certain rules for specific paths where they don't apply
+skip_list: []
+
+# We keep the noqa comments in the patch files for clarity
+# This ensures that the use of 'latest' for OS patching is intentional and documented

@@ -1,8 +1,17 @@
 ---
 # Apply OS patches/updates
 
+- name: Apply security patches based on package manager
+  ansible.builtin.include_tasks: "patches/security/{{ ansible_pkg_mgr }}.yml"
+  when: base_apply_security_patches
+
 - name: Apply OS patches based on package manager
-  ansible.builtin.include_tasks: "patches/{{ ansible_pkg_mgr }}.yml"
+  ansible.builtin.include_tasks: "patches/os/{{ ansible_pkg_mgr }}.yml"
+  when: base_apply_os_patches and not base_apply_security_patches
+
+- name: Apply kernel patches based on package manager
+  ansible.builtin.include_tasks: "patches/kernel/{{ ansible_pkg_mgr }}.yml"
+  when: base_apply_kernel_patches and not base_apply_security_patches
 
 - name: Check if reboot is required (Debian/Ubuntu)
   ansible.builtin.stat:
@@ -12,15 +21,20 @@
 
 - name: Check if reboot is required (RedHat/CentOS/Rocky)
   ansible.builtin.shell: |
+    set -o pipefail
     if [ -f /usr/bin/needs-restarting ]; then
       needs-restarting -r
     else
-      # Fallback: check for kernel updates
-      if rpm -q --last kernel | head -1 | grep -q "$(date +%a\ %b\ %d)"; then
-        exit 1
+      # Fallback: check for kernel updates only if kernel patching is enabled
+      if [ "{{ base_apply_kernel_patches }}" = "True" ]; then
+        if rpm -q --last kernel | head -1 | grep -q "$(date +%a\ %b\ %d)"; then
+          exit 1
+        fi
       fi
       exit 0
     fi
+  args:
+    executable: /bin/bash
   register: reboot_required_check
   failed_when: false
   changed_when: false
@@ -30,7 +44,7 @@
   ansible.builtin.set_fact:
     reboot_required: >-
       {{
-        (ansible_os_family == 'Debian' and reboot_required_file.stat.exists) or
+        (ansible_os_family == 'Debian' and reboot_required_file.stat.exists and base_apply_kernel_patches) or
         (ansible_os_family == 'RedHat' and reboot_required_check.rc == 1)
       }}
 
@@ -47,7 +61,10 @@
 - name: Display patch results
   ansible.builtin.debug:
     msg: |
-      OS patches have been applied successfully.
+      Patch management completed successfully.
+      Security patches applied: {{ base_apply_security_patches }}
+      OS patches applied: {{ base_apply_os_patches and not base_apply_security_patches }}
+      Kernel patches applied: {{ base_apply_kernel_patches and not base_apply_security_patches }}
       Reboot required: {{ reboot_required }}
       {% if base_reboot_after_patches and reboot_required %}
       System was rebooted to apply kernel/system updates.

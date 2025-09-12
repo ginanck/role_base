@@ -1,0 +1,14 @@
+---
+# Apply OS patches/updates for RHEL/Rocky/Fedora (dnf) - excluding kernel packages
+
+- name: Update package cache (dnf)
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: Apply all available OS updates excluding kernel (dnf)
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest  # noqa package-latest
+    update_cache: true
+    exclude: kernel*
+  register: dnf_os_update_result

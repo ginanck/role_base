@@ -1,0 +1,7 @@
+// Enable the update/upgrade script (0=disable)
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+
+// Run unattended-upgrade (0=disable, 1=enable)
+APT::Periodic::Unattended-Upgrade "{{ '1' if base_security_auto_updates_daily else '0' }}";

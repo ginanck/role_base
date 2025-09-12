@@ -1,0 +1,40 @@
+---
+# Apply OS patches/updates for Debian/Ubuntu (apt) - excluding kernel packages
+
+- name: Update package cache (apt)
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Get installed kernel packages
+  ansible.builtin.shell: |
+    set -o pipefail
+    dpkg -l | grep -E '^ii.*linux-(image|headers)' | awk '{print $2}' || true
+  args:
+    executable: /bin/bash
+  register: installed_kernel_packages
+  changed_when: false
+
+- name: Hold kernel packages to exclude from updates
+  ansible.builtin.command: apt-mark hold {{ item }}
+  loop: "{{ installed_kernel_packages.stdout_lines | default([]) }}"
+  when: 
+    - installed_kernel_packages.stdout_lines is defined
+    - installed_kernel_packages.stdout_lines | length > 0
+  changed_when: true
+
+- name: Apply OS updates excluding kernel packages (apt)
+  ansible.builtin.apt:
+    upgrade: 'dist'
+    update_cache: true
+    autoremove: true
+    autoclean: true
+  register: apt_os_update_result
+
+- name: Unhold kernel packages after updates
+  ansible.builtin.command: apt-mark unhold {{ item }}
+  loop: "{{ installed_kernel_packages.stdout_lines | default([]) }}"
+  when: 
+    - installed_kernel_packages.stdout_lines is defined
+    - installed_kernel_packages.stdout_lines | length > 0
+  changed_when: true

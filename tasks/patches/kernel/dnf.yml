@@ -1,0 +1,8 @@
+---
+# Apply kernel patches/updates for RHEL/Rocky/Fedora (dnf)
+
+- name: Apply kernel updates (dnf)
+  ansible.builtin.dnf:
+    name: 'kernel*'
+    state: latest  # noqa package-latest
+  register: dnf_kernel_update

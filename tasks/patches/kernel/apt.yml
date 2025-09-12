@@ -1,0 +1,18 @@
+---
+# Apply kernel patches/updates for Debian/Ubuntu (apt)
+
+- name: Update package cache (apt)
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Apply kernel updates (apt)
+  ansible.builtin.apt:
+    name:
+      - linux-image-generic
+      - linux-headers-generic
+      - linux-generic
+    state: latest  # noqa package-latest
+    update_cache: true
+  register: apt_kernel_update
+  failed_when: false  # Don't fail if packages don't exist
