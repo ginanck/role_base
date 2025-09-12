@@ -11,6 +11,12 @@ base_ca_script_url: "http://ca.internal.guru/scripts/install-linux.sh"
 base_configure_cloud_init: true
 base_swap_disabled: false
 
+# OS Patch Management
+base_apply_os_patches: true
+base_reboot_after_patches: false
+base_reboot_timeout: 600
+base_security_updates_only: false
+
 base_hostname_entries: []
   # - ip: 192.168.1.10
   #   hostname: web01

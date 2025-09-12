@@ -1,0 +1,54 @@
+---
+# Apply OS patches/updates
+
+- name: Apply OS patches based on package manager
+  ansible.builtin.include_tasks: "patches/{{ ansible_pkg_mgr }}.yml"
+
+- name: Check if reboot is required (Debian/Ubuntu)
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+  when: ansible_os_family == 'Debian'
+
+- name: Check if reboot is required (RedHat/CentOS/Rocky)
+  ansible.builtin.shell: |
+    if [ -f /usr/bin/needs-restarting ]; then
+      needs-restarting -r
+    else
+      # Fallback: check for kernel updates
+      if rpm -q --last kernel | head -1 | grep -q "$(date +%a\ %b\ %d)"; then
+        exit 1
+      fi
+      exit 0
+    fi
+  register: reboot_required_check
+  failed_when: false
+  changed_when: false
+  when: ansible_os_family == 'RedHat'
+
+- name: Set reboot required fact
+  ansible.builtin.set_fact:
+    reboot_required: >-
+      {{
+        (ansible_os_family == 'Debian' and reboot_required_file.stat.exists) or
+        (ansible_os_family == 'RedHat' and reboot_required_check.rc == 1)
+      }}
+
+- name: Reboot system if required and configured
+  ansible.builtin.reboot:
+    reboot_timeout: "{{ base_reboot_timeout }}"
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
+  when: 
+    - base_reboot_after_patches
+    - reboot_required
+
+- name: Display patch results
+  ansible.builtin.debug:
+    msg: |
+      OS patches have been applied successfully.
+      Reboot required: {{ reboot_required }}
+      {% if base_reboot_after_patches and reboot_required %}
+      System was rebooted to apply kernel/system updates.
+      {% endif %}
