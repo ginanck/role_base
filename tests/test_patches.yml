@@ -3,20 +3,20 @@
 - name: Test base role with OS patches
   hosts: all
   become: true
-  
+
   vars:
     # Enable OS patching
     base_apply_os_patches: true
-    
+
     # Control kernel patching separately (set to false for VMs that shouldn't reboot)
     base_apply_kernel_patches: true
-    
+
     # Apply only security patches (mutually exclusive with other patch types)
     base_apply_security_patches: false
-    
+
     # Enable automatic reboot if required (use with caution in production)
     base_reboot_after_patches: false
-    
+
     # Additional packages to install
     base_additional_packages:
       - htop
@@ -26,10 +26,10 @@
     
     # Configure hostname
     base_hostname: "{{ inventory_hostname }}"
-    
+
   roles:
     - role_base
-    
+
   post_tasks:
     - name: Display system information after patching
       ansible.builtin.debug:
