@@ -17,6 +17,7 @@ base_apply_kernel_patches: true
 base_apply_security_patches: false
 base_reboot_after_patches: false
 base_reboot_timeout: 600
+base_disable_gpg_check: true
 
 # Security Update Configuration (Debian/Ubuntu)
 base_security_method: "unattended-upgrades"  # Options: "unattended-upgrades" or "apt-sources"

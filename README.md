@@ -55,6 +55,7 @@ Role Variables
 - `base_apply_security_patches`: (bool, default: false) Whether to apply only security patches
 - `base_reboot_after_patches`: (bool, default: false) Whether to reboot system after patches if required
 - `base_reboot_timeout`: (int, default: 600) Timeout in seconds for reboot operation
+- `base_disable_gpg_check`: (bool, default: true) Disable GPG signature checking (useful for containers/testing)
 
 ### Security Update Configuration (Debian/Ubuntu)
 - `base_security_method`: (string, default: "unattended-upgrades") Method for security updates ("unattended-upgrades" or "apt-sources")

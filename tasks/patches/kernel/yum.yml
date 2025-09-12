@@ -5,4 +5,5 @@
   ansible.builtin.yum:
     name: 'kernel*'
     state: latest  # noqa package-latest
+    disable_gpg_check: "{{ base_disable_gpg_check }}"
   register: yum_kernel_update
