@@ -30,7 +30,7 @@
 
 - name: Display download result for debugging
   ansible.builtin.debug:
-    msg: 
+    msg:
       - "Download status: {{ ca_script_download.status_code | default('unknown') }}"
       - "Download failed: {{ ca_script_download.failed }}"
       - "File exists: {{ ca_script_file.stat.exists | default(false) }}"
@@ -61,7 +61,7 @@
   register: script_validation
   become: true
   failed_when: false
-  when: 
+  when:
     - not ca_script_download.failed
     - ca_script_file.stat.exists
     - ca_script_file.stat.size > 0
@@ -72,13 +72,11 @@
   when: script_validation is defined
 
 - name: Execute CA certificate installation script
-  ansible.builtin.shell: |
-    set -o pipefail
-    /tmp/install-linux.sh
+  ansible.builtin.shell: /tmp/install-linux.sh
   become: true
   changed_when: true
   register: cert_install_result
-  when: 
+  when:
     - not ca_script_download.failed
     - ca_script_file.stat.exists
     - ca_script_file.stat.size > 0
@@ -94,6 +92,6 @@
 - name: Display certificate installation output
   ansible.builtin.debug:
     var: cert_install_result.stdout_lines
-  when: 
+  when:
     - cert_install_result is defined
     - cert_install_result.stdout_lines is defined
