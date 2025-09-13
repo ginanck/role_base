@@ -1,0 +1,73 @@
+---
+# Alternative security patches using apt-sources method for Debian/Ubuntu (apt)
+# This method uses specific security source lists for more direct control
+
+- name: Update package cache (apt)
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Create security sources directory
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create security-only sources list for Debian
+  ansible.builtin.template:
+    src: debian-security.sources.list.j2
+    dest: /etc/apt/sources.list.d/debian-security.sources.list
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  when: ansible_distribution == "Debian"
+
+- name: Create security-only sources list for Ubuntu
+  ansible.builtin.template:
+    src: ubuntu-security.sources.list.j2
+    dest: /etc/apt/sources.list.d/ubuntu-security.sources.list
+    owner: root
+    group: root
+    mode: '0644'
+    backup: true
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update package cache with security sources
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Apply security updates using specific sources (Debian)
+  ansible.builtin.shell: |
+    set -o pipefail
+    apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/debian-security.sources.list"
+  args:
+    executable: /bin/bash
+  when: ansible_distribution == "Debian"
+  register: debian_security_update_result
+  changed_when: "'0 upgraded' not in debian_security_update_result.stdout"
+
+- name: Apply security updates using specific sources (Ubuntu)
+  ansible.builtin.shell: |
+    set -o pipefail
+    apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/ubuntu-security.sources.list"
+  args:
+    executable: /bin/bash
+  when: ansible_distribution == "Ubuntu"
+  register: ubuntu_security_update_result
+  changed_when: "'0 upgraded' not in ubuntu_security_update_result.stdout"
+
+- name: Remove unused packages after security updates
+  ansible.builtin.apt:
+    autoremove: true
+    autoclean: true
+  when: base_security_remove_unused_deps
+
+- name: Display security update results
+  ansible.builtin.debug:
+    msg: |
+      Security updates applied using apt-sources method.
+      Distribution: {{ ansible_distribution }}
+      Updates applied: {{ (debian_security_update_result.changed | default(false)) or (ubuntu_security_update_result.changed | default(false)) }}

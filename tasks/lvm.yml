@@ -20,7 +20,7 @@
     vg: "{{ disk.vg }}"
     lv: "{{ item.name }}"
     size: "{{ item.size }}"
-    shrink: no
+    shrink: false
     resizefs: true
   loop: "{{ disk.lv }}"
   loop_control:

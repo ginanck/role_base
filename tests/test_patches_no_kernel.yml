@@ -1,0 +1,39 @@
+---
+# Example playbook for testing OS patches WITHOUT kernel updates
+# Useful for production VMs where reboots should be scheduled separately
+- name: Test base role with OS patches but no kernel updates
+  hosts: all
+  become: true
+
+  vars:
+    # Enable OS patching but exclude kernel updates
+    base_apply_os_patches: true
+    base_apply_kernel_patches: false  # Skip kernel updates to avoid reboot requirement
+
+    # Apply only security patches (set to true for security-only mode)
+    base_apply_security_patches: false
+
+    # Disable automatic reboot since no kernel patches are applied
+    base_reboot_after_patches: false
+
+    # Additional packages to install
+    base_additional_packages:
+      - htop
+      - tree
+      - curl
+      - wget
+
+    # Configure hostname
+    base_hostname: "{{ inventory_hostname }}"
+
+  roles:
+    - role_base
+
+  post_tasks:
+    - name: Display system information after patching
+      ansible.builtin.debug:
+        msg: |
+          System: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          Kernel: {{ ansible_kernel }}
+          Uptime: {{ ansible_uptime_seconds | int // 86400 }} days
+          Note: Kernel patches were skipped - manual kernel update and reboot may be needed later

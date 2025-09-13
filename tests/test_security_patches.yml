@@ -1,0 +1,42 @@
+---
+# Example playbook for testing security-only patches
+# Useful for compliance environments where only security updates are allowed
+- name: Test base role with security patches only
+  hosts: all
+  become: true
+
+  vars:
+    # Enable only security patches
+    base_apply_security_patches: true
+    base_apply_os_patches: false      # Disabled when security patches are enabled
+    base_apply_kernel_patches: false  # Disabled when security patches are enabled
+
+    # Disable automatic reboot in security-only mode
+    base_reboot_after_patches: false
+
+    # Ubuntu/Debian security configuration
+    base_security_auto_updates_daily: false    # Don't enable daily auto-updates in test
+    base_security_auto_reboot: false           # Don't auto-reboot in test
+    base_security_remove_unused_deps: true     # Clean up unused packages
+
+    # Additional packages to install (before patching)
+    base_additional_packages:
+      - htop
+      - tree
+      - curl
+      - wget
+
+    # Configure hostname
+    base_hostname: "{{ inventory_hostname }}"
+
+  roles:
+    - role_base
+
+  post_tasks:
+    - name: Display system information after security patching
+      ansible.builtin.debug:
+        msg: |
+          System: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          Kernel: {{ ansible_kernel }}
+          Uptime: {{ ansible_uptime_seconds | int // 86400 }} days
+          Note: Only security patches were applied to maintain compliance requirements

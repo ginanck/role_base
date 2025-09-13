@@ -1,0 +1,9 @@
+---
+# Apply kernel patches/updates for RHEL/Rocky/Fedora (dnf)
+
+- name: Apply kernel updates (dnf)
+  ansible.builtin.dnf:
+    name: 'kernel*'
+    state: latest  # noqa package-latest
+    disable_gpg_check: "{{ base_disable_gpg_check }}"
+  register: dnf_kernel_update

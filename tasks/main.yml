@@ -7,6 +7,10 @@
 - name: Install Prerequisite Packages
   ansible.builtin.include_tasks: "package/{{ ansible_pkg_mgr }}.yml"
 
+- name: Apply OS Patches
+  ansible.builtin.include_tasks: os_patches.yml
+  when: base_apply_os_patches
+
 - name: Setup Epel-Repo
   ansible.builtin.include_tasks: epel/RedHat.yml
   when: ansible_os_family in ['RedHat']

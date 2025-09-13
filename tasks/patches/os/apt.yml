@@ -1,0 +1,28 @@
+---
+# Apply OS patches/updates for Debian/Ubuntu (apt) - excluding kernel packages
+
+- name: Update package cache (apt)
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Get list of upgradable packages excluding kernel packages
+  ansible.builtin.shell: |
+    set -o pipefail
+    apt list --upgradable 2>/dev/null | grep -v -E '^(linux-image|linux-headers|linux-modules|linux-generic|linux-signed)' | grep -v '^Listing' | cut -d'/' -f1 || true
+  args:
+    executable: /bin/bash
+  register: upgradable_packages
+  changed_when: false
+
+- name: Apply OS updates excluding kernel packages (apt)
+  ansible.builtin.apt:
+    name: "{{ upgradable_packages.stdout_lines }}"
+    state: latest  # noqa package-latest
+    update_cache: true
+    autoremove: true
+    autoclean: true
+  when:
+    - upgradable_packages.stdout_lines is defined
+    - upgradable_packages.stdout_lines | length > 0
+  register: apt_os_update_result

@@ -12,7 +12,7 @@
     name: firewalld
     state: stopped
     enabled: false
-    masked: yes  # Adding masking for extra protection
+    masked: true  # Adding masking for extra protection
   failed_when: false
   when: ansible_os_family == 'RedHat'
 
@@ -21,6 +21,6 @@
     name: ufw
     state: stopped
     enabled: false
-    masked: yes  # Adding masking for extra protection
+    masked: true  # Adding masking for extra protection
   failed_when: false
   when: ansible_os_family == 'Debian'

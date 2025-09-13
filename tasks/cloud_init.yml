@@ -20,7 +20,7 @@
     path: /etc/cloud/cloud.cfg
     regexp: '^(\s*)-\s*update_etc_hosts\s*$'
     line: '  # - update_etc_hosts'
-    backrefs: yes
+    backrefs: true
     state: present
   register: update_etc_hosts_result
 
@@ -29,7 +29,7 @@
     name: cloud-init
     state: restarted
     enabled: true
-    daemon_reload: yes
+    daemon_reload: true
   failed_when: false
   when: >
     (cloud_init_result is defined and cloud_init_result.changed) or

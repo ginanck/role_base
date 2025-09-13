@@ -1,0 +1,9 @@
+---
+# Apply kernel patches/updates for RHEL/CentOS (yum)
+
+- name: Apply kernel updates (yum)
+  ansible.builtin.yum:
+    name: 'kernel*'
+    state: latest  # noqa package-latest
+    disable_gpg_check: "{{ base_disable_gpg_check }}"
+  register: yum_kernel_update

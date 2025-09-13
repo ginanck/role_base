@@ -1,0 +1,11 @@
+---
+# Apply security patches/updates for Debian/Ubuntu (apt)
+# Supports two methods: unattended-upgrades (default) and apt-sources
+
+- name: Apply security updates using unattended-upgrades method
+  ansible.builtin.include_tasks: apt-unattended.yml
+  when: base_security_method == "unattended-upgrades"
+
+- name: Apply security updates using apt-sources method
+  ansible.builtin.include_tasks: apt-sources.yml
+  when: base_security_method == "apt-sources"

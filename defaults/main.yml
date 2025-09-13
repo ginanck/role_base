@@ -11,6 +11,21 @@ base_ca_script_url: "http://ca.internal.guru/scripts/install-linux.sh"
 base_configure_cloud_init: true
 base_swap_disabled: false
 
+# OS Patch Management
+base_apply_os_patches: true
+base_apply_kernel_patches: true
+base_apply_security_patches: false
+base_reboot_after_patches: false
+base_reboot_timeout: 600
+base_disable_gpg_check: true
+
+# Security Update Configuration (Debian/Ubuntu)
+base_security_method: "unattended-upgrades"  # Options: "unattended-upgrades" or "apt-sources"
+base_security_auto_reboot: false
+base_security_auto_reboot_time: "02:00"
+base_security_remove_unused_deps: true
+base_security_auto_updates_daily: false
+
 base_hostname_entries: []
   # - ip: 192.168.1.10
   #   hostname: web01

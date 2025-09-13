@@ -1,0 +1,16 @@
+---
+# Apply security patches/updates for RHEL/Rocky/Fedora (dnf)
+
+- name: Update package cache (dnf)
+  ansible.builtin.dnf:
+    update_cache: true
+    disable_gpg_check: "{{ base_disable_gpg_check }}"
+
+- name: Apply security updates only (dnf)
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest  # noqa package-latest
+    update_cache: true
+    security: true
+    disable_gpg_check: "{{ base_disable_gpg_check }}"
+  register: dnf_security_update_result
