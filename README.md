@@ -83,6 +83,7 @@ Role Variables
 
 ### Security & Services
 - `base_ca_install_enabled`: (bool, default: true) Whether to install CA certificates
+- `base_ca_script_url`: (string, default: "http://ca.internal.guru/scripts/install-linux.sh") URL for CA certificate installation script
 - `base_configure_cloud_init`: (bool, default: true) Whether to configure cloud-init
 
 Dependencies

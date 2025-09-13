@@ -5,6 +5,7 @@ base_domain: "internal.guru"
 base_hostname: ""
 base_hostname_configured: true
 
+# CA Certificate Configuration
 base_ca_install_enabled: true
 base_ca_script_url: "http://ca.internal.guru/scripts/install-linux.sh"
 

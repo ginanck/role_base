@@ -2,10 +2,74 @@
 
 - name: Download CA certificate installation script
   ansible.builtin.get_url:
-    url: http://ca.internal.guru/scripts/install-linux.sh
+    url: "{{ base_ca_script_url }}"
     dest: /tmp/install-linux.sh
     mode: '0755'
+    timeout: 30
   become: true
+  register: ca_script_download
+  failed_when: false
+
+- name: Check if downloaded file exists and has content
+  ansible.builtin.stat:
+    path: /tmp/install-linux.sh
+  register: ca_script_file
+  become: true
+
+- name: Check first few lines of downloaded file for debugging
+  ansible.builtin.shell: |
+    if [ -f /tmp/install-linux.sh ]; then
+      echo "File exists, first 5 lines:"
+      head -5 /tmp/install-linux.sh
+    else
+      echo "File does not exist"
+    fi
+  register: file_content_check
+  become: true
+  when: ca_script_download is defined
+
+- name: Display download result for debugging
+  ansible.builtin.debug:
+    msg: 
+      - "Download status: {{ ca_script_download.status_code | default('unknown') }}"
+      - "Download failed: {{ ca_script_download.failed }}"
+      - "File exists: {{ ca_script_file.stat.exists | default(false) }}"
+      - "File size: {{ ca_script_file.stat.size | default(0) }} bytes"
+      - "Download message: {{ ca_script_download.msg | default('No message') }}"
+      - "File content preview: {{ file_content_check.stdout_lines | default(['No content']) }}"
+
+- name: Check if CA script download was successful
+  ansible.builtin.debug:
+    msg: "CA certificate script download failed or file is invalid"
+  when: ca_script_download.failed or not ca_script_file.stat.exists or ca_script_file.stat.size == 0
+
+- name: Validate downloaded script is executable
+  ansible.builtin.shell: |
+    if [ -f /tmp/install-linux.sh ]; then
+      # Check if file starts with shebang
+      if head -1 /tmp/install-linux.sh | grep -q "^#!"; then
+        echo "Valid shell script"
+        exit 0
+      else
+        echo "Not a valid shell script - missing shebang"
+        exit 1
+      fi
+    else
+      echo "File does not exist"
+      exit 1
+    fi
+  register: script_validation
+  become: true
+  failed_when: false
+  when: 
+    - not ca_script_download.failed
+    - ca_script_file.stat.exists
+    - ca_script_file.stat.size > 0
+
+- name: Display script validation result
+  ansible.builtin.debug:
+    msg: "Script validation: {{ script_validation.stdout | default('Not validated') }}"
+  when: script_validation is defined
 
 - name: Execute CA certificate installation script
   ansible.builtin.shell: |
@@ -14,14 +78,22 @@
   become: true
   changed_when: true
   register: cert_install_result
+  when: 
+    - not ca_script_download.failed
+    - ca_script_file.stat.exists
+    - ca_script_file.stat.size > 0
+    - script_validation.rc == 0
 
 - name: Remove temporary installation script
   ansible.builtin.file:
     path: /tmp/install-linux.sh
     state: absent
   become: true
+  when: ca_script_file.stat.exists | default(false)
 
 - name: Display certificate installation output
   ansible.builtin.debug:
     var: cert_install_result.stdout_lines
-  when: cert_install_result.stdout_lines is defined
+  when: 
+    - cert_install_result is defined
+    - cert_install_result.stdout_lines is defined
