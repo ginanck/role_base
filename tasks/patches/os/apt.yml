@@ -22,7 +22,7 @@
     update_cache: true
     autoremove: true
     autoclean: true
-  when: 
+  when:
     - upgradable_packages.stdout_lines is defined
     - upgradable_packages.stdout_lines | length > 0
   register: apt_os_update_result
