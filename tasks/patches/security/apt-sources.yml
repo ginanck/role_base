@@ -39,19 +39,23 @@
   ansible.builtin.apt:
     update_cache: true
 
-- name: Apply security updates using specific sources (Debian)
-  ansible.builtin.shell: |
-    apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/debian-security.sources.list"
+- name: Apply security updates for Debian systems
+  ansible.builtin.apt:
+    upgrade: safe
+    update_cache: true
+    cache_valid_time: 0
+    install_recommends: false
   when: ansible_distribution == "Debian"
   register: debian_security_update_result
-  changed_when: "'0 upgraded' not in debian_security_update_result.stdout"
 
-- name: Apply security updates using specific sources (Ubuntu)
-  ansible.builtin.shell: |
-    apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/ubuntu-security.sources.list"
+- name: Apply security updates for Ubuntu systems  
+  ansible.builtin.apt:
+    upgrade: safe
+    update_cache: true
+    cache_valid_time: 0
+    install_recommends: false
   when: ansible_distribution == "Ubuntu"
   register: ubuntu_security_update_result
-  changed_when: "'0 upgraded' not in ubuntu_security_update_result.stdout"
 
 - name: Remove unused packages after security updates
   ansible.builtin.apt:

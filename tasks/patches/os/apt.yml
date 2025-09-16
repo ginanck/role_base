@@ -8,10 +8,7 @@
 
 - name: Get list of upgradable packages excluding kernel packages
   ansible.builtin.shell: |
-    set -o pipefail
     apt list --upgradable 2>/dev/null | grep -v -E '^(linux-image|linux-headers|linux-modules|linux-generic|linux-signed)' | grep -v '^Listing' | cut -d'/' -f1 || true
-  args:
-    executable: /bin/bash
   register: upgradable_packages
   changed_when: false
 

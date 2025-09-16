@@ -32,7 +32,7 @@ Alternative Ubuntu/Debian security with direct apt-sources:
   roles:
     - role: role_base
       base_apply_security_patches: true
-      base_security_method: "apt-sources"          # Direct apt-get approach
+      base_security_method: "apt-sources"          # Direct apt module approach
       base_security_remove_unused_deps: true
 ```
 
@@ -152,7 +152,7 @@ The role organizes patches into three categories:
   - **RHEL/CentOS**: Uses `yum/dnf` with `security: true` parameter
   - **Debian/Ubuntu**: Two methods available:
     - `unattended-upgrades` (default): Official Ubuntu/Debian recommendation
-    - `apt-sources`: Direct apt-get with security-only source lists
+    - `apt-sources`: Direct apt module with security-only source lists
 - **OS Patches** (`tasks/patches/os/`): Updates for applications, libraries, and system packages (excluding kernel)
 - **Kernel Patches** (`tasks/patches/kernel/`): Updates specifically for kernel packages
 
