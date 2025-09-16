@@ -48,7 +48,7 @@
   when: ansible_distribution == "Debian"
   register: debian_security_update_result
 
-- name: Apply security updates for Ubuntu systems  
+- name: Apply security updates for Ubuntu systems
   ansible.builtin.apt:
     upgrade: safe
     update_cache: true

@@ -63,7 +63,7 @@
 - name: Apply security updates using unattended-upgrades
   ansible.builtin.command: unattended-upgrade
   register: apt_security_update_result
-  changed_when: 
+  changed_when:
     - apt_security_update_result.rc == 0
     - security_updates_available
   failed_when: apt_security_update_result.rc != 0 and apt_security_update_result.rc != 1
