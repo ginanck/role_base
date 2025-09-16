@@ -29,6 +29,7 @@ provisioner:
       role-base-almalinux8:
         ansible_user: root
         base_hostname: "role-base-almalinux8"
+        base_apply_security_patches: false
   playbooks:
     converge: ../resources/converge.yml
 verifier:
