@@ -74,9 +74,12 @@
 - name: Execute CA certificate installation script
   ansible.builtin.shell: /tmp/install-linux.sh
   become: true
-  changed_when: true
   register: cert_install_result
-  when:
+  changed_when: 
+    - cert_install_result.rc == 0
+    - cert_install_result.stdout is defined
+    - "'installed' in cert_install_result.stdout.lower() or 'updated' in cert_install_result.stdout.lower() or 'added' in cert_install_result.stdout.lower()"
+  when: 
     - not ca_script_download.failed
     - ca_script_file.stat.exists
     - ca_script_file.stat.size > 0

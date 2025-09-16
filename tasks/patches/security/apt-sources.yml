@@ -41,20 +41,14 @@
 
 - name: Apply security updates using specific sources (Debian)
   ansible.builtin.shell: |
-    set -o pipefail
     apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/debian-security.sources.list"
-  args:
-    executable: /bin/bash
   when: ansible_distribution == "Debian"
   register: debian_security_update_result
   changed_when: "'0 upgraded' not in debian_security_update_result.stdout"
 
 - name: Apply security updates using specific sources (Ubuntu)
   ansible.builtin.shell: |
-    set -o pipefail
     apt-get upgrade -y -oDir::Etc::sourcelist="sources.list.d/ubuntu-security.sources.list"
-  args:
-    executable: /bin/bash
   when: ansible_distribution == "Ubuntu"
   register: ubuntu_security_update_result
   changed_when: "'0 upgraded' not in ubuntu_security_update_result.stdout"

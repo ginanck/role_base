@@ -29,7 +29,6 @@ provisioner:
       role-base-ubuntu2404:
         ansible_user: root
         base_hostname: "role-base-ubuntu2404"
-        base_apply_security_patches: false
   playbooks:
     converge: ../resources/converge.yml
 verifier:
