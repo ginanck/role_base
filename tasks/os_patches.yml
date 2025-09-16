@@ -21,7 +21,6 @@
 
 - name: Check if reboot is required (RedHat/CentOS/Rocky)
   ansible.builtin.shell: |
-    set -o pipefail
     if [ -f /usr/bin/needs-restarting ]; then
       needs-restarting -r
     else

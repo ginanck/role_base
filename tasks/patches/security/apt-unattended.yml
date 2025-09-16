@@ -46,16 +46,28 @@
   changed_when: false
   failed_when: false
 
+- name: Check if security updates are available
+  ansible.builtin.set_fact:
+    security_updates_available: "{{ 'The following packages will be upgraded:' in security_dry_run.stderr or 'Packages that will be upgraded:' in security_dry_run.stderr }}"
+
 - name: Display available security updates
   ansible.builtin.debug:
     msg: "Available security updates found"
-  when: security_dry_run.rc == 0
+  when: security_updates_available
+
+- name: Display no security updates message
+  ansible.builtin.debug:
+    msg: "No security updates available"
+  when: not security_updates_available
 
 - name: Apply security updates using unattended-upgrades
   ansible.builtin.command: unattended-upgrade
   register: apt_security_update_result
-  changed_when: apt_security_update_result.rc == 0
+  changed_when:
+    - apt_security_update_result.rc == 0
+    - security_updates_available
   failed_when: apt_security_update_result.rc != 0 and apt_security_update_result.rc != 1
+  when: security_updates_available
 
 - name: Clean up package cache after security updates
   ansible.builtin.apt:
