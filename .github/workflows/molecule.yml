@@ -1,9 +1,10 @@
 ---
 name: molecule
 on:
+  push:
+    branches:
+      - master
   pull_request:
-  schedule:
-    - cron: "0 6 * * *"
 
 jobs:
   lint:
