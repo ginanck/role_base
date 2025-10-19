@@ -15,7 +15,7 @@ on:
       molecule_scenario:
         description: 'Molecule scenario to run'
         required: false
-        default: 'default'
+        default: 'all'
         type: choice
         options:
           - all
@@ -101,6 +101,8 @@ jobs:
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
+          ansible-galaxy collection install community.docker:4.8.1 -p ./collections --force
+
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             molecule test -s ${{ matrix.scenario }} --debug
           else
