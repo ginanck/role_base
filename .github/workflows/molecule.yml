@@ -100,13 +100,6 @@ jobs:
           # Install only essential packages needed to run molecule commands
           pip3 install ansible molecule[docker] docker
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Pull custom Docker image
         run: |
           docker pull ghcr.io/ginanck/molecule-ubuntu:24.04-latest
