@@ -5,6 +5,13 @@ on:
     branches:
       - master
   pull_request:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the pipeline on'
+        required: false
+        default: 'master'
+        type: string
 
 jobs:
   lint:
