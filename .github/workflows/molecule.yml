@@ -107,8 +107,6 @@ jobs:
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
-          ansible-galaxy collection install community.docker:4.7.0 --force
-
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             molecule test -s ${{ matrix.scenario }} --debug
           else
