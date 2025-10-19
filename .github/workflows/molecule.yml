@@ -99,12 +99,6 @@ jobs:
         run: |
           pip3 install ansible molecule molecule-docker docker
 
-      - name: Verify Docker and Molecule setup
-        run: |
-          docker --version
-          molecule --version
-          molecule drivers
-
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then

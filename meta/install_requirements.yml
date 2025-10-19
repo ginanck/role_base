@@ -2,6 +2,9 @@
 
 roles: []
 collections:
+  - name: community.docker
+    version: 4.7.0
+
   # Third Party Collections
   # https://galaxy.ansible.com/ui/repo/published/community/general/docs/
   # https://github.com/ansible-collections/community.general
