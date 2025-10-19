@@ -15,10 +15,9 @@ on:
       molecule_scenario:
         description: 'Molecule scenario to run'
         required: false
-        default: 'all'
+        default: 'default'
         type: choice
         options:
-          - all
           - default
           - ubuntu2404
       python_version:
