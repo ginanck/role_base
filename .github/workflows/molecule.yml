@@ -97,19 +97,19 @@ jobs:
 
       - name: Install minimal test dependencies
         run: |
-          # Install only essential packages needed to run molecule commands
-          pip3 install ansible molecule[docker] docker
+          pip3 install ansible molecule molecule-docker docker
 
-      - name: Pull custom Docker image
+      - name: Verify Docker and Molecule setup
         run: |
-          docker pull ghcr.io/ginanck/molecule-ubuntu:24.04-latest
-
-      - name: Install Ansible community.docker collection
-        run: ansible-galaxy collection install community.docker:4.7.0 --force
+          docker --version
+          molecule --version
+          molecule drivers
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
-          if [ "${{ inputs.debug_mode }}" == "true" ]; then
+          ansible-galaxy collection install community.docker:4.7.0 --force
+
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             molecule test -s ${{ matrix.scenario }} --debug
           else
             molecule test -s ${{ matrix.scenario }}
