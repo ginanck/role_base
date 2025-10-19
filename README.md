@@ -144,14 +144,14 @@ This role has no external dependencies on other Ansible roles.
         base_apply_kernel_patches: true
         base_reboot_after_patches: true
         base_reboot_timeout: 300
-        
+
         # Debian/Ubuntu security automation
         base_security_method: "unattended-upgrades"
         base_security_auto_reboot: true
         base_security_auto_reboot_time: "03:00"
         base_security_remove_unused_deps: true
         base_security_auto_updates_daily: true
-        
+
         # CA certificate installation
         base_ca_install_enabled: true
         base_ca_script_url: "https://ca.company.com/install.sh"
@@ -170,7 +170,7 @@ This role has no external dependencies on other Ansible roles.
         base_hostname: "infra01"
         base_domain: "internal.company.com"
         base_hostname_configured: true
-        
+
         # DNS configuration
         base_resolv_conf_managed: true
         base_resolv_nameserver_entries:
@@ -183,7 +183,7 @@ This role has no external dependencies on other Ansible roles.
           - "edns0"
           - "trust-ad"
           - "ndots:2"
-        
+
         # Additional hosts entries
         base_hostname_entries:
           - ip: "10.0.1.100"
@@ -244,7 +244,7 @@ This role has no external dependencies on other Ansible roles.
       vars:
         # Disable swap for database performance
         base_swap_disabled: true
-        
+
         # LVM configuration for data storage
         base_lvm_disks:
           - pv: "/dev/vdb"
@@ -256,7 +256,7 @@ This role has no external dependencies on other Ansible roles.
               - name: "logs"
                 size: "20G"
                 path: "/var/log/mysql"
-          
+
           - pv: "/dev/vdc"
             vg: "backup"
             lv:
@@ -279,7 +279,7 @@ This role has no external dependencies on other Ansible roles.
         base_apply_os_patches: false
         base_apply_kernel_patches: false
         base_reboot_after_patches: false
-        
+
         # Development packages (includes Python build dependencies)
         base_additional_packages:
           - docker.io
@@ -288,11 +288,11 @@ This role has no external dependencies on other Ansible roles.
           - npm
           - python3-pip
           - python3-venv
-        
+
         # Relaxed security for development
         base_disable_gpg_check: true
         base_security_auto_updates_daily: false
-        
+
         # Configure cloud-init for development VMs
         base_configure_cloud_init: true
 ```
@@ -312,17 +312,17 @@ This role has no external dependencies on other Ansible roles.
         base_apply_kernel_patches: true
         base_reboot_after_patches: true
         base_disable_gpg_check: false
-        
+
         # Enterprise DNS
         base_resolv_nameserver_entries:
           - "10.1.1.10"
           - "10.1.1.11"
         base_resolv_nameserver_search_domains:
           - "corp.enterprise.com"
-        
+
         # Cloud-init disabled for compliance
         base_configure_cloud_init: false
-        
+
         # Comprehensive package set
         base_additional_packages:
           - aide
@@ -331,7 +331,7 @@ This role has no external dependencies on other Ansible roles.
           - auditd
           - rsyslog
           - logrotate
-        
+
         # Enterprise time sources
         base_chrony_config:
           server:
@@ -357,13 +357,13 @@ This role has no external dependencies on other Ansible roles.
         base_configure_cloud_init: false
         base_resolv_conf_managed: false
         base_ca_install_enabled: false
-        
+
         # Focus on security patches only
         base_apply_security_patches: true
         base_apply_os_patches: false
         base_apply_kernel_patches: false
         base_reboot_after_patches: false
-        
+
         # Don't install additional packages
         base_additional_packages: []
 ```
@@ -496,25 +496,25 @@ Comprehensive security baseline configuration:
 
 ### Common Issues
 
-**Patch Installation Failures**: 
+**Patch Installation Failures**:
 - Check `base_disable_gpg_check` setting - may need to be `true` for repositories with signing issues
 - Verify repository accessibility and network connectivity
 - Review package manager logs for specific error messages
 - Consider temporary network or repository issues
 
-**Time Synchronization Problems**: 
+**Time Synchronization Problems**:
 - Verify NTP server accessibility from managed hosts
 - Check firewall rules for NTP traffic (UDP port 123)
 - Review `base_chrony_config.server` configuration for correct server addresses
 - Monitor chronyd logs for synchronization status
 
-**Storage Configuration Issues**: 
+**Storage Configuration Issues**:
 - Ensure block devices specified in `base_lvm_disks` actually exist on target systems
 - Verify sufficient disk space for requested logical volume sizes
 - Check for existing LVM configurations that might conflict
 - Review /var/log/messages for storage-related errors
 
-**Hostname Resolution Problems**: 
+**Hostname Resolution Problems**:
 - Verify DNS configuration in `base_resolv_nameserver_entries`
 - Check network connectivity to configured DNS servers
 - Review `/etc/hosts` for conflicts with `base_hostname_entries`
@@ -557,5 +557,5 @@ MIT
 
 ## Author Information
 
-This role has been created by gkorkmaz  
+This role has been created by gkorkmaz
 GitHub: https://github.com/ginanck
