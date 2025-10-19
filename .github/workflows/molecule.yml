@@ -51,15 +51,27 @@ jobs:
         with:
           python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
 
-      - name: Install pre-commit and dependencies
+      - name: Download linter configurations
         run: |
-          pip3 install pre-commit
-          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/requirements.txt -o requirements.txt
-          pip3 install -r requirements.txt
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o .ansible-lint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o .yamllint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o .flake8.conf
 
-      - name: Run pre-commit hooks
+      - name: Install linter dependencies
         run: |
-          pre-commit run --all-files
+          pip3 install ansible-lint yamllint flake8
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint -c .ansible-lint.yml .
+
+      - name: Run yamllint
+        run: |
+          yamllint -c .yamllint.yml .
+
+      - name: Run flake8
+        run: |
+          flake8 --config=.flake8.conf .
 
   molecule:
     name: Molecule
