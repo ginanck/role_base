@@ -12,6 +12,30 @@ on:
         required: false
         default: 'master'
         type: string
+      molecule_scenario:
+        description: 'Molecule scenario to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - default
+          - ubuntu2404
+      python_version:
+        description: 'Python version to use'
+        required: false
+        default: '3.9.23'
+        type: choice
+        options:
+          - '3.9.23'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+      debug_mode:
+        description: 'Enable debug mode for verbose output'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   lint:
@@ -20,72 +44,23 @@ jobs:
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-
-      - name: Check out hooks repository
-        uses: actions/checkout@v4
         with:
-          repository: 'ginanck/hooks_molecule'
-          ref: 'master'
-          path: hooks_molecule
-          token: '${{ secrets.HOOKS_TOKEN }}'
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python 3.9.23
+      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.23'
+          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
 
-      - name: Install test dependencies from hooks repository
+      - name: Install pre-commit and dependencies
         run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
-          else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
-          fi
+          pip3 install pre-commit
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/requirements.txt -o requirements.txt
+          pip3 install -r requirements.txt
 
-      - name: ansible-lint
+      - name: Run pre-commit hooks
         run: |
-          # Check for local ansible-lint config first, then fallback to hooks
-          if [ -f ".ansible-lint" ]; then
-            echo "Using local .ansible-lint configuration"
-            ansible-lint .
-          elif [ -f "hooks_molecule/ansible-lint.conf" ]; then
-            echo "Using external ansible-lint configuration"
-            ansible-lint -c hooks_molecule/ansible-lint.conf .
-          else
-            echo "No configuration found, running with defaults"
-            ansible-lint .
-          fi
-
-      - name: yamllint
-        run: |
-          # Check for local yamllint config first, then fallback to hooks
-          if [ -f ".yamllint" ] || [ -f ".yamllint.yml" ] || [ -f ".yamllint.yaml" ]; then
-            echo "Using local yamllint configuration"
-            yamllint .
-          elif [ -f "hooks_molecule/yamllint.conf" ]; then
-            echo "Using external yamllint configuration"
-            yamllint -c hooks_molecule/yamllint.conf .
-          else
-            echo "No configuration found, running with defaults"
-            yamllint .
-          fi
-
-      - name: flake8
-        run: |
-          # Check for local flake8 config first, then fallback to hooks
-          if [ -f ".flake8" ] || [ -f "setup.cfg" ]; then
-            echo "Using local flake8 configuration"
-            flake8 .
-          elif [ -f "hooks_molecule/flake8.conf" ]; then
-            echo "Using external flake8 configuration"
-            flake8 --config=hooks_molecule/flake8.conf .
-          else
-            echo "No configuration found, running with defaults"
-            flake8 .
-          fi
+          pre-commit run --all-files
 
   molecule:
     name: Molecule
@@ -94,44 +69,46 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario:
-          - default
-          - ubuntu2404
+        scenario: ${{ github.event.inputs.molecule_scenario == 'all' && fromJson('["default", "ubuntu2404"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'default')) }}
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
-
-      - name: Check out hooks repository
-        uses: actions/checkout@v4
         with:
-          repository: 'ginanck/hooks_molecule'
-          ref: 'master'
-          path: hooks_molecule
-          token: '${{ secrets.HOOKS_TOKEN }}'
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python 3.9.23
+      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.23'
+          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
 
-      - name: Install test dependencies from hooks repository
+      - name: Install minimal test dependencies
         run: |
-          # Check if hooks repository has requirements file
-          if [ -f "hooks_molecule/requirements.txt" ]; then
-            echo "Installing dependencies from hooks_molecule/requirements.txt"
-            pip3 install -r hooks_molecule/requirements.txt
-          else
-            echo "No requirements.txt found in hooks repository, installing default dependencies"
-            pip3 install ansible ansible-lint yamllint flake8 molecule[docker] docker
-          fi
+          # Install only essential packages needed to run molecule commands
+          pip3 install ansible molecule[docker] docker
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull custom Docker image
+        run: |
+          docker pull ghcr.io/ginanck/molecule-ubuntu:24.04-latest
 
       - name: Install Ansible community.docker collection
         run: ansible-galaxy collection install community.docker:4.7.0 --force
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
-        run: molecule test -s ${{ matrix.scenario }}
+        run: |
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
+            molecule test -s ${{ matrix.scenario }} --debug
+          else
+            molecule test -s ${{ matrix.scenario }}
+          fi
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
