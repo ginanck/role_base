@@ -53,9 +53,9 @@ jobs:
 
       - name: Download linter configurations
         run: |
-          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o .ansible-lint.yml
-          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o .yamllint.yml
-          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o .flake8.conf
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o ansible-lint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o yamllint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o flake8.conf
 
       - name: Install linter dependencies
         run: |
@@ -63,15 +63,15 @@ jobs:
 
       - name: Run ansible-lint
         run: |
-          ansible-lint -c .ansible-lint.yml .
+          ansible-lint -c ansible-lint.yml .
 
       - name: Run yamllint
         run: |
-          yamllint -c .yamllint.yml .
+          yamllint -c yamllint.yml .
 
       - name: Run flake8
         run: |
-          flake8 --config=.flake8.conf .
+          flake8 --config=flake8.conf .
 
   molecule:
     name: Molecule
