@@ -106,10 +106,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull custom Docker image
-        run: |
-          docker pull ghcr.io/ginanck/molecule-ubuntu:24.04-latest
-
       - name: Install Ansible community.docker collection
         run: ansible-galaxy collection install community.docker:4.7.0 --force
 
