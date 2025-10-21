@@ -47,7 +47,7 @@ jobs:
     name: Lint Syntax Checks
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/ginanck/molecule-debian:12-latest
+      image: ghcr.io/ginanck/molecule-almalinux:9-latest
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
@@ -71,14 +71,14 @@ jobs:
 
       - name: Run flake8
         run: |
-          pip install flake8
+          pip3 install flake8
           flake8 --config=flake8.conf .
 
   molecule:
     name: Molecule Test
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/ginanck/molecule-debian:12-latest
+      image: ghcr.io/ginanck/molecule-almalinux:9-latest
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     needs: lint
@@ -97,7 +97,7 @@ jobs:
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
-          ansible-galaxy collection install community.docker.git,4.8.1
+          ansible-galaxy collection install community.docker:4.8.1
 
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             molecule test -s ${{ matrix.scenario }} --debug
