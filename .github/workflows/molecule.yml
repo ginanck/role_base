@@ -107,6 +107,19 @@ jobs:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
 
+      - name: Install python packages
+        run: |
+          pip3 install \
+            ansible-compat \
+            ansible-lint \
+            flake8 \
+            yamllint \
+            molecule \
+            molecule-docker \
+            docker \
+            requests \
+            urllib3
+
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
           ansible-galaxy collection install community.docker:4.8.1
