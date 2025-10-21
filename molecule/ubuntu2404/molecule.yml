@@ -23,7 +23,7 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_ROLES_PATH: ../../roles:../../../
-    ANSIBLE_COLLECTIONS_PATHS: ../../collections
+    ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
       role-base-ubuntu-2404:
