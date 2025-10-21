@@ -55,6 +55,19 @@ jobs:
           repository: ${{ inputs.repository }}
           ref: ${{ inputs.ref }}
 
+      - name: Install python packages
+        run: |
+          pip3 install \
+            ansible-compat \
+            ansible-lint \
+            flake8 \
+            yamllint \
+            molecule \
+            molecule-docker \
+            docker \
+            requests \
+            urllib3
+
       - name: Download linter configurations
         run: |
           curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o ansible-lint.yml
@@ -71,7 +84,6 @@ jobs:
 
       - name: Run flake8
         run: |
-          pip3 install flake8
           flake8 --config=flake8.conf .
 
   molecule:
