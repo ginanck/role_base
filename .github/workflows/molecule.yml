@@ -29,7 +29,7 @@ jobs:
     name: Lint Syntax Checks
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/ginanck/molecule-almalinux:9-latest
+      image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
     name: Molecule Test
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/ginanck/molecule-almalinux:9-latest
+      image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     strategy:
@@ -75,7 +75,7 @@ jobs:
 
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
-          ansible-galaxy collection install community.docker:4.8.1 --force
+          # ansible-galaxy collection install community.docker:4.8.1 --force
 
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
             molecule --debug test -s ${{ matrix.scenario }}
