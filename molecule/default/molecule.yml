@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-almalinux8
+  - name: role-base-almalinux-8
     image: ghcr.io/ginanck/molecule-almalinux:8-latest
     pre_build_image: true
     privileged: true
@@ -23,12 +23,12 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_ROLES_PATH: ../../roles:../../../
-    ANSIBLE_COLLECTIONS_PATHS: ../../collections
+    ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-almalinux8:
+      role-base-almalinux-8:
         ansible_user: root
-        base_hostname: "role-base-almalinux8"
+        base_hostname: "role-base-almalinux-8"
   playbooks:
     converge: ../resources/converge.yml
 verifier:

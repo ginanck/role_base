@@ -3,6 +3,10 @@
 roles: []
 collections:
   # Third Party Collections
+  # This docker colleciton required for molecule to be able to spin up new container
+  - name: community.docker
+    version: 4.8.1
+
   # https://galaxy.ansible.com/ui/repo/published/community/general/docs/
   # https://github.com/ansible-collections/community.general
   - name: community.general

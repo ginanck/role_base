@@ -9,11 +9,6 @@ on:
       - master
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch to run the pipeline on'
-        required: false
-        default: 'master'
-        type: string
       molecule_scenario:
         description: 'Molecule scenario to run'
         required: false
@@ -23,16 +18,6 @@ on:
           - all
           - default
           - ubuntu2404
-      python_version:
-        description: 'Python version to use'
-        required: false
-        default: '3.9.23'
-        type: choice
-        options:
-          - '3.9.23'
-          - '3.10'
-          - '3.11'
-          - '3.12'
       debug_mode:
         description: 'Enable debug mode for verbose output'
         required: false
@@ -41,28 +26,21 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint Syntax Checks
     runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/ginanck/molecule-almalinux:9-latest
     steps:
       - name: Check out the codebase
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
-
       - name: Download linter configurations
         run: |
           curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o ansible-lint.yml
           curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o yamllint.yml
           curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o flake8.conf
-
-      - name: Install linter dependencies
-        run: |
-          pip3 install ansible-lint yamllint flake8
 
       - name: Run ansible-lint
         run: |
@@ -77,9 +55,12 @@ jobs:
           flake8 --config=flake8.conf .
 
   molecule:
-    name: Molecule
+    name: Molecule Test
     runs-on: ubuntu-latest
-    needs: lint
+    container: 
+      image: ghcr.io/ginanck/molecule-almalinux:9-latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
     strategy:
       fail-fast: false
       matrix:
@@ -92,21 +73,12 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up Python ${{ github.event.inputs.python_version || '3.9.23' }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ github.event.inputs.python_version || '3.9.23' }}
-
-      - name: Install minimal test dependencies
-        run: |
-          pip3 install ansible molecule molecule-docker docker
-
       - name: Run Molecule tests for ${{ matrix.scenario }} scenario
         run: |
           ansible-galaxy collection install community.docker:4.8.1 --force
 
           if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
-            molecule test -s ${{ matrix.scenario }} --debug
+            molecule --debug test -s ${{ matrix.scenario }}
           else
             molecule test -s ${{ matrix.scenario }}
           fi
