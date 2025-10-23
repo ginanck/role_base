@@ -1,11 +1,14 @@
 ---
 
-base_os_specific_packages:
+base_bind_package: "{{ 'bind9-utils' if ansible_distribution == 'Ubuntu' or (ansible_distribution == 'Debian' and ansible_distribution_major_version | int >= 13) else 'bind9utils' }}"
+base_common_packages:
   - python3-selinux
   - selinux-utils
   - policycoreutils
-  - bind9-utils
   - liblvm2-dev
+  - "{{ base_bind_package }}"
+
+base_os_specific_packages: "{{ base_common_packages + (['util-linux-extra'] if (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '24') or (ansible_distribution == 'Debian' and ansible_distribution_major_version == '13') else []) }}"
 
 base_pyenv_build_dependencies:
   - make

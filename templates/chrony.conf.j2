@@ -14,11 +14,11 @@
     {{- macro.add_driftfile(base_chrony_config.driftfile) }}
 {%- endif %}
 
-{%- if base_chrony_config.makestep is defined %}
+{%- if base_chrony_config.makestep is defined and ansible_virtualization_type not in ['container', 'docker'] %}
     {{- macro.add_makestep(base_chrony_config.makestep) }}
 {%- endif %}
 
-{%- if base_chrony_config.rtcsync is defined %}
+{%- if base_chrony_config.rtcsync is defined and ansible_virtualization_type not in ['container', 'docker'] %}
     {{- macro.add_rtcsync(base_chrony_config.rtcsync) }}
 {%- endif %}
 
