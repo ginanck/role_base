@@ -22,12 +22,36 @@
   register: chrony_keys_result
   when: base_chrony_keys is defined
 
-- name: Restart chronyd
+- name: Create systemd drop-in directory for chrony (container only)
+  ansible.builtin.file:
+    path: /etc/systemd/system/chrony.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: ansible_virtualization_type in ['container', 'docker']
+
+- name: Force -x option for chrony in containers (Ubuntu 20.04 workaround)
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/chrony.service.d/override.conf
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/usr/sbin/chronyd -x
+    owner: root
+    group: root
+    mode: "0644"
+  when: ansible_virtualization_type in ['container', 'docker']
+
+- name: Reload systemd daemon
   ansible.builtin.systemd:
-    name: chronyd
-    state: restarted
+    daemon_reload: true
+  when: ansible_virtualization_type in ['container', 'docker']
+
+- name: Start chrony
+  ansible.builtin.systemd:
+    name: chrony
+    state: started
     enabled: true
     daemon_reload: true
-  when: >
-    (chrony_conf_result is defined and chrony_conf_result.changed) or
-    (chrony_keys_result is defined and chrony_keys_result.changed)
+  when: ansible_virtualization_type not in ['container', 'docker']

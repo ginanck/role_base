@@ -2,5 +2,5 @@
 
 - name: Setup EPEL repo
   ansible.builtin.dnf:
-    name: epel-release.noarch
+    name: "{{ base_epel_package }}"
     state: present
