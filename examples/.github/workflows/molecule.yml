@@ -1,0 +1,86 @@
+---
+name: molecule
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      molecule_scenario:
+        description: 'Molecule scenario to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - default
+          - almalinux-9
+          - almalinux-10
+      debug_mode:
+        description: 'Enable debug mode for verbose output'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  lint:
+    name: Lint Syntax Checks
+    runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Download linter configurations
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/ansible-lint.yml -o ansible-lint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/yamllint.yml -o yamllint.yml
+          curl -fsSL https://raw.githubusercontent.com/ginanck/shared-pre-commit-hooks/master/config/flake8.conf -o flake8.conf
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint -c ansible-lint.yml .
+
+      - name: Run yamllint
+        run: |
+          yamllint -c yamllint.yml .
+
+      - name: Run flake8
+        run: |
+          flake8 --config=flake8.conf .
+
+  molecule:
+    name: Molecule Test
+    runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: ${{ (github.event.inputs.molecule_scenario || 'all') == 'all' && fromJson('["default", "almalinux-9", "almalinux-10"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'all')) }}
+    env:
+      DOCKER_HOST: 'unix:///var/run/docker.sock'
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Run Molecule tests for ${{ matrix.scenario }} scenario
+        run: |
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
+            molecule --debug -vvv test -s ${{ matrix.scenario }}
+          else
+            molecule test -s ${{ matrix.scenario }}
+          fi
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
