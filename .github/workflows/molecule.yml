@@ -128,7 +128,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ fromJson(needs.prepare.outputs.scenarios }}
+        scenario: ${{ fromJson(needs.prepare.outputs.scenarios || '["default"]') }}
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
