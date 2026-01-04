@@ -1,5 +1,7 @@
 ---
 
+base_chrony_service_name: chrony
+
 base_bind_package: "{{ 'bind9-utils' if ansible_distribution == 'Ubuntu' or (ansible_distribution == 'Debian' and ansible_distribution_major_version | int >= 13) else 'bind9utils' }}"
 base_common_packages:
   - python3-selinux
