@@ -9,11 +9,6 @@ on:
       - master
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch to run the pipeline on'
-        required: false
-        default: 'master'
-        type: string
       molecule_scenario:
         description: 'Molecule scenario to run'
         required: false
