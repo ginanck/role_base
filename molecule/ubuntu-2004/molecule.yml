@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-ubuntu-2004
+  - name: ubuntu-2004
     image: ghcr.io/ginanck/molecule-ubuntu:20.04-latest
     pre_build_image: true
     privileged: true
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-ubuntu-2004:
+      ubuntu-2004:
         ansible_user: root
-        base_hostname: "role-base-ubuntu-2004"
+        base_hostname: "ubuntu-2004"
   playbooks:
     converge: ../resources/converge.yml
 verifier:

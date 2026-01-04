@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-debian-12
+  - name: debian-12
     image: ghcr.io/ginanck/molecule-debian:12-latest
     pre_build_image: true
     privileged: true
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-debian-12:
+      debian-12:
         ansible_user: root
-        base_hostname: "role-base-debian-12"
+        base_hostname: "debian-12"
   playbooks:
     converge: ../resources/converge.yml
 verifier:

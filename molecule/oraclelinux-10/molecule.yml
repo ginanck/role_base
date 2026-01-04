@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-oraclelinux-10
+  - name: oraclelinux-10
     image: ghcr.io/ginanck/molecule-oraclelinux:10-latest
     pre_build_image: true
     privileged: true
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-oraclelinux-10:
+      oraclelinux-10:
         ansible_user: root
-        base_hostname: "role-base-oraclelinux-10"
+        base_hostname: "oraclelinux-10"
   playbooks:
     converge: ../resources/converge.yml
 verifier:

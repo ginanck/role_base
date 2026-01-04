@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-almalinux-9
+  - name: almalinux-9
     image: ghcr.io/ginanck/molecule-almalinux:9-latest
     pre_build_image: true
     privileged: true
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-almalinux-9:
+      almalinux-9:
         ansible_user: root
-        base_hostname: "role-base-almalinux-9"
+        base_hostname: "almalinux-9"
   playbooks:
     converge: ../resources/converge.yml
 verifier:
