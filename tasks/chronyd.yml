@@ -24,7 +24,7 @@
 
 - name: Create systemd drop-in directory for chrony (container only)
   ansible.builtin.file:
-    path: /etc/systemd/system/chrony.service.d
+    path: "/etc/systemd/system/{{ base_chrony_service_name }}.service.d"
     state: directory
     owner: root
     group: root
@@ -33,7 +33,7 @@
 
 - name: Force -x option for chrony in containers (Ubuntu 20.04 workaround)
   ansible.builtin.copy:
-    dest: /etc/systemd/system/chrony.service.d/override.conf
+    dest: "/etc/systemd/system/{{ base_chrony_service_name }}.service.d/override.conf"
     content: |
       [Service]
       ExecStart=
@@ -50,7 +50,7 @@
 
 - name: Start chrony
   ansible.builtin.systemd:
-    name: chrony
+    name: "{{ base_chrony_service_name }}"
     state: started
     enabled: true
     daemon_reload: true

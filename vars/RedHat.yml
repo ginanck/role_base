@@ -1,5 +1,7 @@
 ---
 
+base_chrony_service_name: chronyd
+
 base_epel_package: "{{ 'oracle-epel-release-el' + ansible_distribution_major_version if ansible_distribution == 'OracleLinux' else 'epel-release' }}"
 
 base_os_specific_packages:
