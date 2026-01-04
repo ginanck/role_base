@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: role-base-rockylinux-8
+  - name: rockylinux-8
     image: ghcr.io/ginanck/molecule-rockylinux:8-latest
     pre_build_image: true
     privileged: true
@@ -26,9 +26,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      role-base-rockylinux-8:
+      rockylinux-8:
         ansible_user: root
-        base_hostname: "role-base-rockylinux-8"
+        base_hostname: "rockylinux-8"
   playbooks:
     converge: ../resources/converge.yml
 verifier:
