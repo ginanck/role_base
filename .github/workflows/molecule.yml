@@ -67,17 +67,68 @@ jobs:
         run: |
           flake8 --config=flake8.conf .
 
+  prepare:
+    name: Prepare Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      scenarios: ${{ steps.set-matrix.outputs.scenarios }}
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set matrix scenarios
+        id: set-matrix
+        run: |
+          set -euo pipefail
+          input="${{ github.event.inputs.molecule_scenario || 'all' }}"
+
+          if [ "$input" = "all" ]; then
+            scenarios_list=()
+            if [ -d "molecule" ]; then
+              for dir in molecule/*; do
+                [ -d "$dir" ] || continue
+                name="$(basename "$dir")"
+                if [ -f "$dir/molecule.yml" ] || [ -f "$dir/molecule.yaml" ]; then
+                  scenarios_list+=("$name")
+                fi
+              done
+            fi
+
+            if [ "${#scenarios_list[@]}" -eq 0 ]; then
+              echo "No scenario detected or selected! Please configure your molecule scenarios!" >&2
+              exit 1
+            fi
+
+            # build JSON array from list
+            scenarios="$(printf '%s\n' "${scenarios_list[@]}" | jq -R -s -c 'split("\n")[:-1]')"
+          else
+            # single scenario requested: validate it exists and has molecule.yml
+            sel="$input"
+            if [ -d "molecule/$sel" ] && ( [ -f "molecule/$sel/molecule.yml" ] || [ -f "molecule/$sel/molecule.yaml" ] ); then
+              scenarios="$(jq -n --arg s "$sel" '[$s]')"
+            else
+              echo "No scenario detected or selected! Please configure your molecule scenarios!" >&2
+              exit 1
+            fi
+          fi
+
+          echo "Found scenarios: $scenarios"
+          echo "scenarios=$scenarios" >> $GITHUB_OUTPUT
+
   molecule:
     name: Molecule Test
+    needs: prepare
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ (github.event.inputs.molecule_scenario || 'all') == 'all' && fromJson('["default", "almalinux-9", "almalinux-10", "rockylinux-8", "rockylinux-9", "rockylinux-10", "oraclelinux-8", "oraclelinux-9", "oraclelinux-10", "debian-11", "debian-12", "debian-13", "ubuntu-2004", "ubuntu-2204", "ubuntu-2404"]') || fromJson(format('["{0}"]', github.event.inputs.molecule_scenario || 'all')) }}
+        scenario: ${{ fromJson(needs.prepare.outputs.scenarios || '["default"]') }}
     env:
       DOCKER_HOST: 'unix:///var/run/docker.sock'
     steps:
