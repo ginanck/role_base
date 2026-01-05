@@ -2,6 +2,14 @@ galaxy_info:
   author: gkorkmaz
   description: role_base to configure base settings
 
+  documented_requirements:
+    - name: community.docker
+      version: 4.8.1
+    - name: community.general
+      version: 6.6.1
+    - name: ansible.posix
+      version: 1.5.4
+
   namespace: core
   role_name: role_base
 
@@ -31,13 +39,3 @@ galaxy_info:
 
   galaxy_tags: []
 dependencies: []
-
-documented_requirements:
-  - name: community.docker
-    version: 4.8.1
-
-  - name: community.general
-    version: 6.6.1
-
-  - name: ansible.posix
-    version: 1.5.4
