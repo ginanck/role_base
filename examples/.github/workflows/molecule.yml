@@ -29,7 +29,7 @@ jobs:
   lint:
     name: Lint Syntax Checks
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
     steps:
       - name: Check out the codebase
@@ -58,7 +58,7 @@ jobs:
   molecule:
     name: Molecule Test
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ghcr.io/ginanck/molecule-runner:python3.12-2.15.13
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock

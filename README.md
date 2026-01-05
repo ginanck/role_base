@@ -1,200 +1,423 @@
-# Ansible Role: Base System Configuration
+<!-- DOCSIBLE START -->
+# Ansible Role: role_base
 
-A comprehensive Ansible role for base system configuration that handles essential server setup tasks including package management, patch management, security configuration, network settings, time synchronization, and storage management. This role provides a solid foundation for server provisioning across multiple Linux distributions.
+
+role_base to configure base settings
+
+
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Dependencies](#dependencies)
+- [Role Variables](#role-variables)
+- [Task Overview](#task-overview)
+- [Example Playbook](#example-playbook)
+- [Documentation Maintenance](#documentation-maintenance)
+- [License](#license)
+- [Author Information](#author-information)
 
 ## Requirements
 
-- **Ansible Version**: 2.9 or higher
-- **Supported Operating Systems**:
-  - Ubuntu 18.04, 20.04, 22.04, 24.04
-  - Debian 10, 11, 12
-  - CentOS/RHEL 7, 8, 9
-  - Rocky Linux 8, 9
-  - AlmaLinux 8, 9
 
-## Role Variables
 
-### Core System Configuration
+- Ansible >= 2.9
 
-- `base_domain`: (string, default: "internal.guru") Base domain name for hostname resolution
-- `base_hostname`: (string, default: "") System hostname to configure
-- `base_hostname_configured`: (bool, default: true) Whether to configure the system hostname
-- `base_timezone`: (string, default: "Europe/Helsinki") System timezone configuration
 
-### Certificate Management
+- Supported platforms:
+  - Ubuntu (focal, jammy, noble)
+  - Debian (buster, bullseye, bookworm)
+  - EL (7, 8, 9)
+  - Rocky (8.0, 9.0)
 
-- `base_ca_install_enabled`: (bool, default: true) Enable installation of CA certificates
-- `base_ca_script_url`: (string, default: "http://ca.internal.guru/scripts/install-linux.sh") URL for CA certificate installation script
 
-### Cloud and System Configuration
-
-- `base_configure_cloud_init`: (bool, default: true) Configure cloud-init settings
-- `base_swap_disabled`: (bool, default: false) Whether to disable swap
-
-### Package Management
-
-- `base_default_packages`: (list, default: ["vim", "net-tools", "tar", "unzip", "gzip", "telnet", "chrony", "wget", "curl", "llvm", "lvm2", "git"]) Default packages to install on all systems
-- `base_additional_packages`: (list, default: []) Additional packages to install beyond defaults
-- `base_os_specific_packages`: (list, varies by OS) OS-specific packages automatically included based on distribution
-- `base_pyenv_build_dependencies`: (list, varies by OS) Python environment build dependencies
-
-### OS Patch Management
-
-- `base_apply_os_patches`: (bool, default: true) Apply operating system patches
-- `base_apply_kernel_patches`: (bool, default: true) Apply kernel patches
-- `base_apply_security_patches`: (bool, default: true) Apply security patches
-- `base_reboot_after_patches`: (bool, default: false) Automatically reboot after applying patches
-- `base_reboot_timeout`: (int, default: 600) Timeout in seconds for reboot operations
-- `base_disable_gpg_check`: (bool, default: true) Disable GPG signature checking for package operations
-
-### Security Configuration (Debian/Ubuntu)
-
-- `base_security_method`: (string, default: "unattended-upgrades") Security update method ("unattended-upgrades" or "apt-sources")
-- `base_security_auto_reboot`: (bool, default: false) Enable automatic reboot for security updates
-- `base_security_auto_reboot_time`: (string, default: "02:00") Time for automatic security reboots
-- `base_security_remove_unused_deps`: (bool, default: true) Remove unused dependencies during security updates
-- `base_security_auto_updates_daily`: (bool, default: false) Enable daily automatic security updates
-
-### Network Configuration
-
-- `base_hostname_entries`: (list, default: []) Additional hostname entries for /etc/hosts
-- `base_resolv_conf_managed`: (bool, default: true) Manage /etc/resolv.conf configuration
-- `base_resolv_nameserver_entries`: (list, default: ["172.16.2.21"]) DNS nameserver entries
-- `base_resolv_nameserver_search_domains`: (list, default: ["."]) DNS search domains
-- `base_resolv_nameserver_resolv_options`: (list, default: ["edns0", "trust-ad"]) DNS resolver options
-
-### Time Synchronization (Chrony)
-
-- `base_chrony_keys`: (list, default: []) Chrony authentication keys
-- `base_chrony_config`: (dict) Comprehensive chrony configuration with the following structure:
-  - `server`: NTP server configuration with name list and parameters
-  - `sourcedir`: Source directory for additional configuration
-  - `driftfile`: Path to drift file
-  - `makestep`: Step threshold and limit
-  - `rtcsync`: Enable RTC synchronization
-  - `hwtimestamp`: Hardware timestamping configuration
-  - `minsources`: Minimum number of sources
-  - `allow`: Network access control (optional)
-  - `local`: Local clock configuration
-  - `authselectmode`: Authentication mode
-  - `keyfile`: Key file path
-  - `ntsdumpdir`: NTS dump directory
-  - `leapsecmode`: Leap second handling mode
-  - `leapsectz`: Leap second timezone
-  - `logdir`: Log directory
-  - `log`: Logging configuration
-
-### Storage Management (LVM)
-
-- `base_lvm_disks`: (list, default: []) LVM disk configuration with the following structure:
-  ```yaml
-  - pv: /dev/vdb                    # Physical volume device
-    vg: data                        # Volume group name
-    lv:                            # Logical volumes list
-      - name: jenkins              # Logical volume name
-        size: 15G                  # Size specification
-        path: /data/jenkins        # Mount point
-  ```
-
-### Platform-Specific Variables
-
-**RedHat-based systems** (automatically included from `vars/RedHat.yml`):
-- `base_os_specific_packages`: ["policycoreutils-python-utils", "python3-libselinux", "python3-policycoreutils", "bind-utils", "epel-release", "lvm2-libs"]
-- `base_pyenv_build_dependencies`: ["make", "gcc", "patch", "zlib-devel", "bzip2", "bzip2-devel", "readline-devel", "sqlite", "sqlite-devel", "openssl-devel", "tk-devel", "libffi-devel", "xz-devel", "libuuid-devel", "gdbm-libs", "libnsl2"]
-
-**Debian-based systems** (automatically included from `vars/Debian.yml`):
-- `base_os_specific_packages`: ["python3-selinux", "selinux-utils", "policycoreutils", "bind9-utils", "liblvm2-dev"]
-- `base_pyenv_build_dependencies`: ["make", "build-essential", "libssl-dev", "zlib1g-dev", "libbz2-dev", "libreadline-dev", "libsqlite3-dev", "libncursesw5-dev", "xz-utils", "tk-dev", "libxml2-dev", "libxmlsec1-dev", "libffi-dev", "liblzma-dev"]
 
 ## Dependencies
 
-This role has no external dependencies on other Ansible roles.
 
-## Example Playbooks
+This role requires the following roles and collections:
 
-### Basic Usage
 
-```yaml
----
-- hosts: servers
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        base_hostname: "web01"
-        base_domain: "example.com"
-        base_timezone: "UTC"
-        base_additional_packages:
-          - htop
-          - iotop
+
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+
+
+**Collections:**
+
+- `community.docker` (>= 4.8.1)
+
+- `community.general` (>= 6.6.1)
+
+- `ansible.posix` (>= 1.5.4)
+
+
+
+To install all dependencies:
+```bash
+ansible-galaxy install -r meta/install_requirements.yml
 ```
 
-### Security-Focused Configuration
 
-```yaml
----
-- hosts: production
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Security patch configuration
-        base_apply_security_patches: true
-        base_apply_os_patches: true
-        base_apply_kernel_patches: true
-        base_reboot_after_patches: true
-        base_reboot_timeout: 300
+## Role Variables
 
-        # Debian/Ubuntu security automation
-        base_security_method: "unattended-upgrades"
-        base_security_auto_reboot: true
-        base_security_auto_reboot_time: "03:00"
-        base_security_remove_unused_deps: true
-        base_security_auto_updates_daily: true
 
-        # CA certificate installation
-        base_ca_install_enabled: true
-        base_ca_script_url: "https://ca.company.com/install.sh"
-```
 
-### Network and DNS Configuration
+### File: `defaults/main.yml`
 
-```yaml
----
-- hosts: infrastructure
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Hostname and domain setup
-        base_hostname: "infra01"
-        base_domain: "internal.company.com"
-        base_hostname_configured: true
+| Variable | Default Value | Description |
+|----------|---------------|-------------|
+| `base_domain` | `internal.guru` | None |
+| `base_hostname` | `` | None |
+| `base_hostname_configured` | `True` | None |
+| `base_ca_install_enabled` | `True` | None |
+| `base_ca_script_url` | `http://ca.internal.guru/scripts/install-linux.sh` | None |
+| `base_configure_cloud_init` | `True` | None |
+| `base_swap_disabled` | `False` | None |
+| `base_apply_os_patches` | `True` | None |
+| `base_apply_kernel_patches` | `True` | None |
+| `base_apply_security_patches` | `True` | None |
+| `base_reboot_after_patches` | `False` | None |
+| `base_reboot_timeout` | `600` | None |
+| `base_disable_gpg_check` | `True` | None |
+| `base_security_method` | `unattended-upgrades` | None |
+| `base_security_auto_reboot` | `False` | None |
+| `base_security_auto_reboot_time` | `02:00` | None |
+| `base_security_remove_unused_deps` | `True` | None |
+| `base_security_auto_updates_daily` | `False` | None |
+| `base_hostname_entries` | `[]` | None |
+| `base_resolv_conf_managed` | `True` | None |
+| `base_resolv_nameserver_entries` | `[]` | None |
+| `base_resolv_nameserver_entries.0` | `172.16.2.21` | None |
+| `base_resolv_nameserver_search_domains` | `[]` | None |
+| `base_resolv_nameserver_search_domains.0` | `.` | None |
+| `base_resolv_nameserver_resolv_options` | `[]` | None |
+| `base_resolv_nameserver_resolv_options.0` | `edns0` | None |
+| `base_resolv_nameserver_resolv_options.1` | `trust-ad` | None |
+| `base_default_packages` | `[]` | None |
+| `base_default_packages.0` | `vim` | None |
+| `base_default_packages.1` | `net-tools` | None |
+| `base_default_packages.2` | `tar` | None |
+| `base_default_packages.3` | `unzip` | None |
+| `base_default_packages.4` | `gzip` | None |
+| `base_default_packages.5` | `telnet` | None |
+| `base_default_packages.6` | `chrony` | None |
+| `base_default_packages.7` | `wget` | None |
+| `base_default_packages.8` | `curl` | None |
+| `base_default_packages.9` | `llvm` | None |
+| `base_default_packages.10` | `lvm2` | None |
+| `base_default_packages.11` | `git` | None |
+| `base_additional_packages` | `[]` | None |
+| `base_timezone` | `Europe/Helsinki` | None |
+| `base_chrony_keys` | `[]` | None |
+| `base_chrony_config` | `{}` | None |
+| `base_chrony_config.server` | `{}` | None |
+| `base_chrony_config.server.param` | `iburst` | None |
+| `base_chrony_config.server.name` | `[]` | None |
+| `base_chrony_config.server.name.0` | `0.fi.pool.ntp.org` | None |
+| `base_chrony_config.server.name.1` | `1.fi.pool.ntp.org` | None |
+| `base_chrony_config.server.name.2` | `2.fi.pool.ntp.org` | None |
+| `base_chrony_config.server.name.3` | `3.fi.pool.ntp.org` | None |
+| `base_chrony_config.sourcedir` | `/run/chrony-dhcp` | None |
+| `base_chrony_config.driftfile` | `/var/lib/chrony/drift` | None |
+| `base_chrony_config.makestep` | `1.0 3` | None |
+| `base_chrony_config.rtcsync` | `True` | None |
+| `base_chrony_config.hwtimestamp` | `*` | None |
+| `base_chrony_config.minsources` | `2` | None |
+| `base_chrony_config.local` | `{}` | None |
+| `base_chrony_config.local.stratum` | `10` | None |
+| `base_chrony_config.authselectmode` | `require` | None |
+| `base_chrony_config.keyfile` | `/etc/chrony.keys` | None |
+| `base_chrony_config.ntsdumpdir` | `/var/lib/chrony` | None |
+| `base_chrony_config.leapsecmode` | `slew` | None |
+| `base_chrony_config.leapsectz` | `right/UTC` | None |
+| `base_chrony_config.logdir` | `/var/log/chrony` | None |
+| `base_chrony_config.log` | `{}` | None |
+| `base_chrony_config.log.measurements` | `True` | None |
+| `base_chrony_config.log.statistics` | `True` | None |
+| `base_chrony_config.log.tracking` | `True` | None |
+| `base_lvm_disks` | `[]` | None |
 
-        # DNS configuration
-        base_resolv_conf_managed: true
-        base_resolv_nameserver_entries:
-          - "10.0.1.10"
-          - "10.0.1.11"
-        base_resolv_nameserver_search_domains:
-          - "company.com"
-          - "internal.company.com"
-        base_resolv_nameserver_resolv_options:
-          - "edns0"
-          - "trust-ad"
-          - "ndots:2"
 
-        # Additional hosts entries
-        base_hostname_entries:
-          - ip: "10.0.1.100"
-            hostname: "database"
-            fqdn: "database.internal.company.com"
-          - ip: "10.0.1.101"
-            hostname: "cache"
-            fqdn: "cache.internal.company.com"
-```
 
-### Time Synchronization Configuration
+
+## Task Overview
+
+
+This role performs the following tasks:
+
+
+### `resolve.yml`
+
+
+- **Update resolv.conf**
+
+
+### `cloud_init.yml`
+
+
+- **Ensure cloud-init config directory exists**
+- **Set preserve_hostname to true in cloud-init config**
+- **Remove update_etc_hosts from cloud_init_modules**
+- **Restart cloud-init**
+
+
+### `os_patches.yml`
+
+
+- **Apply security patches based on package manager**
+- **Apply OS patches based on package manager**
+- **Apply kernel patches based on package manager**
+- **Check if reboot is required (Debian/Ubuntu)**
+- **Check if reboot is required (RedHat/CentOS/Rocky)**
+- **Set reboot required fact**
+- **Reboot system if required and configured**
+- **Display patch results**
+
+
+### `chronyd.yml`
+
+
+- **Generate /etc/chrony.conf**
+- **Generate /etc/chrony.keys**
+- **Create systemd drop-in directory for chrony (container only)**
+- **Force -x option for chrony in containers (Ubuntu 20.04 workaround)**
+- **Reload systemd daemon**
+- **Start chrony**
+
+
+### `swap.yml`
+
+
+- **Disable swap at runtime**
+- **Disable swap permanently (in /etc/fstab)**
+
+
+### `selinux.yml`
+
+
+- **Check if SELinux is available**
+- **Disable SELinux immediately (if installed)**
+- **Disable SELinux permanently (if installed)**
+- **Check if AppArmor is installed (Debian/Ubuntu)**
+- **Disable AppArmor (if installed on Debian/Ubuntu)**
+
+
+### `timezone.yml`
+
+
+- **Set timezone on nodes**
+
+
+### `firewall.yml`
+
+
+- **Gather OS facts**
+- **Stop and disable firewalld service**
+- **Stop and disable ufw service**
+
+
+### `grow-partition.yml`
+
+
+- **Extract base disk and partition number for partitioned disks**
+- **Check if partition needs to grow (dry-run)**
+- **Grow partition only if needed**
+
+
+### `lvm.yml`
+
+
+- **Detect disk type (partition vs whole disk)**
+- **Extend partition-based disk**
+- **Create a Volume Group**
+- **Create a Logical Volume**
+- **Check if filesystem exists**
+- **Make Filesystem**
+- **Create mount point directories**
+- **Mount Filesystem**
+
+
+### `main.yml`
+
+
+- **Include Base Vars**
+- **Install Prerequisite Packages**
+- **Apply OS Patches**
+- **Setup Epel-Repo**
+- **Install CA Certificate**
+- **Disable Cloud-Init manage_hostname**
+- **Setup resolve.conf**
+- **Setup Hostname of the Nodes**
+- **Setup Hosts**
+- **Setup Timezone**
+- **Setup Chrony**
+- **Disable Selinux**
+- **Disable Firewall**
+- **Disable Swap**
+- **Setup LVM Disk**
+
+
+### `certificate.yml`
+
+
+- **Download CA certificate installation script**
+- **Check if downloaded file exists and has content**
+- **Check first few lines of downloaded file for debugging**
+- **Display download result for debugging**
+- **Check if CA script download was successful**
+- **Validate downloaded script is executable**
+- **Display script validation result**
+- **Execute CA certificate installation script**
+- **Remove temporary installation script**
+- **Display certificate installation output**
+
+
+### `hostname.yml`
+
+
+- **Set hostname on the node**
+
+
+### `hosts.yml`
+
+
+- **Gather network facts**
+- **Check if /etc/hosts is accessible**
+- **Update hostname entries in /etc/hosts**
+
+
+### `epel/RedHat.yml`
+
+
+- **Setup EPEL repo**
+
+
+### `patches/security/apt-sources.yml`
+
+
+- **Update package cache (apt)**
+- **Create security sources directory**
+- **Create security-only sources list for Debian**
+- **Create security-only sources list for Ubuntu**
+- **Update package cache with security sources**
+- **Apply security updates for Debian systems**
+- **Apply security updates for Ubuntu systems**
+- **Remove unused packages after security updates**
+- **Display security update results**
+
+
+### `patches/security/apt-unattended.yml`
+
+
+- **Update package cache (apt)**
+- **Install required packages for security updates**
+- **Configure unattended-upgrades for security updates only**
+- **Configure unattended-upgrades automatic updates**
+- **Enable unattended-upgrades service**
+- **Run dry-run to check available security updates**
+- **Check if security updates are available**
+- **Display available security updates**
+- **Display no security updates message**
+- **Apply security updates using unattended-upgrades**
+- **Clean up package cache after security updates**
+
+
+### `patches/security/apt.yml`
+
+
+- **Apply security updates using unattended-upgrades method**
+- **Apply security updates using apt-sources method**
+
+
+### `patches/security/yum.yml`
+
+
+- **Update package cache (yum)**
+- **Apply security updates only (yum)**
+
+
+### `patches/security/dnf.yml`
+
+
+- **Update package cache (dnf)**
+- **Apply security updates only (dnf)**
+
+
+### `patches/os/apt.yml`
+
+
+- **Update package cache (apt)**
+- **Get list of upgradable packages excluding kernel packages**
+- **Apply OS updates excluding kernel packages (apt)**
+
+
+### `patches/os/yum.yml`
+
+
+- **Update package cache (yum)**
+- **Apply all available OS updates excluding kernel (yum)**
+
+
+### `patches/os/dnf.yml`
+
+
+- **Update package cache (dnf)**
+- **Apply all available OS updates excluding kernel (dnf)**
+
+
+### `patches/kernel/apt.yml`
+
+
+- **Update package cache (apt)**
+- **Apply kernel updates (apt)**
+
+
+### `patches/kernel/yum.yml`
+
+
+- **Apply kernel updates (yum)**
+
+
+### `patches/kernel/dnf.yml`
+
+
+- **Apply kernel updates (dnf)**
+
+
+### `package/apt.yml`
+
+
+- **Install prerequisites (Debian family)**
+
+
+### `package/yum.yml`
+
+
+- **Install prerequisites (RedHat family with yum)**
+
+
+### `package/dnf.yml`
+
+
+- **Install prerequisites (RedHat family with dnf)**
+
+
+
+
+## Example Playbook
 
 ```yaml
 ---
@@ -202,360 +425,65 @@ This role has no external dependencies on other Ansible roles.
   become: yes
   roles:
     - role: role_base
+
       vars:
-        base_timezone: "America/New_York"
-        base_chrony_config:
-          server:
-            param: "iburst maxpoll 6"
-            name:
-              - "time1.company.com"
-              - "time2.company.com"
-              - "pool.ntp.org"
-          sourcedir: "/etc/chrony/sources.d"
-          driftfile: "/var/lib/chrony/drift"
-          makestep: "1.0 3"
-          rtcsync: yes
-          hwtimestamp: "*"
-          minsources: 2
-          allow:
-            - "192.168.0.0/16"
-            - "10.0.0.0/8"
-          local:
-            stratum: 10
-          authselectmode: "require"
-          keyfile: "/etc/chrony.keys"
-          logdir: "/var/log/chrony"
-          log:
-            measurements: yes
-            statistics: yes
-            tracking: yes
-        base_chrony_keys:
-          - "1 SHA256 HEX:1234567890ABCDEF"
+        base_domain: internal.guru
+        base_hostname: 
+        base_hostname_configured: True
+
 ```
 
-### Storage Management with LVM
-
-```yaml
----
-- hosts: database_servers
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Disable swap for database performance
-        base_swap_disabled: true
-
-        # LVM configuration for data storage
-        base_lvm_disks:
-          - pv: "/dev/vdb"
-            vg: "data"
-            lv:
-              - name: "mysql"
-                size: "50G"
-                path: "/var/lib/mysql"
-              - name: "logs"
-                size: "20G"
-                path: "/var/log/mysql"
-
-          - pv: "/dev/vdc"
-            vg: "backup"
-            lv:
-              - name: "backup_storage"
-                size: "100%FREE"
-                path: "/backup"
-```
-
-### Development Environment Setup
-
-```yaml
----
-- hosts: development
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Minimal patching for development
-        base_apply_security_patches: false
-        base_apply_os_patches: false
-        base_apply_kernel_patches: false
-        base_reboot_after_patches: false
-
-        # Development packages (includes Python build dependencies)
-        base_additional_packages:
-          - docker.io
-          - docker-compose
-          - nodejs
-          - npm
-          - python3-pip
-          - python3-venv
-
-        # Relaxed security for development
-        base_disable_gpg_check: true
-        base_security_auto_updates_daily: false
-
-        # Configure cloud-init for development VMs
-        base_configure_cloud_init: true
-```
-
-### Enterprise Compliance Configuration
-
-```yaml
----
-- hosts: compliance_servers
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Strict patch management
-        base_apply_security_patches: true
-        base_apply_os_patches: true
-        base_apply_kernel_patches: true
-        base_reboot_after_patches: true
-        base_disable_gpg_check: false
-
-        # Enterprise DNS
-        base_resolv_nameserver_entries:
-          - "10.1.1.10"
-          - "10.1.1.11"
-        base_resolv_nameserver_search_domains:
-          - "corp.enterprise.com"
-
-        # Cloud-init disabled for compliance
-        base_configure_cloud_init: false
-
-        # Comprehensive package set
-        base_additional_packages:
-          - aide
-          - rkhunter
-          - chkrootkit
-          - auditd
-          - rsyslog
-          - logrotate
-
-        # Enterprise time sources
-        base_chrony_config:
-          server:
-            param: "iburst minpoll 4 maxpoll 6"
-            name:
-              - "ntp1.enterprise.com"
-              - "ntp2.enterprise.com"
-          authselectmode: "require"
-          minsources: 2
-```
-
-### Patch Management Only (Minimal Configuration)
-
-```yaml
----
-- hosts: existing_servers
-  become: yes
-  roles:
-    - role: role_base
-      vars:
-        # Only apply patches, don't configure other aspects
-        base_hostname_configured: false
-        base_configure_cloud_init: false
-        base_resolv_conf_managed: false
-        base_ca_install_enabled: false
-
-        # Focus on security patches only
-        base_apply_security_patches: true
-        base_apply_os_patches: false
-        base_apply_kernel_patches: false
-        base_reboot_after_patches: false
-
-        # Don't install additional packages
-        base_additional_packages: []
-```
-
-## Detailed Feature Sections
-
-### Package Management
-
-The role provides comprehensive package management across different Linux distributions:
-
-- **Universal Packages**: A curated set of essential packages installed on all systems including system utilities, network tools, version control, and management tools
-- **OS-Specific Packages**: Automatically includes distribution-specific packages for optimal functionality (SELinux tools, DNS utilities, LVM libraries)
-- **Python Build Dependencies**: Complete development toolchain for Python environments when needed
-- **Custom Package Lists**: Easily extend with additional packages for specific use cases
-
-**Platform-Specific Behavior**:
-- **RedHat/CentOS**: Includes EPEL repository and SELinux tools, GCC toolchain
-- **Debian/Ubuntu**: Includes security repository configuration and build-essential
-- **All Platforms**: LVM tools, network utilities, and system administration packages
-
-### Patch Management System
-
-Advanced patch management with granular control over different types of updates:
-
-**Security Patches**: Priority handling of security updates with automated installation options. When enabled, takes precedence over other patch types to ensure security-first approach.
-
-**Kernel Patches**: Separate control for kernel updates with intelligent reboot coordination. Automatically detects when reboots are required and can perform them safely.
-
-**OS Patches**: General system updates with flexible scheduling. Includes all non-security package updates for maintaining system currency.
-
-**Reboot Management**: Intelligent reboot handling with configurable timeouts and conditional execution based on patch types applied.
-
-**Debian/Ubuntu Specific Features**:
-- **Unattended Upgrades**: Fully automated security update installation with configurable scheduling
-- **APT Sources Method**: Manual security repository configuration for custom update sources
-- **Dependency Cleanup**: Automatic removal of unused packages to maintain system cleanliness
-- **Scheduled Reboots**: Time-based automatic reboots for security updates with customizable maintenance windows
-
-### Network Configuration
-
-Comprehensive network setup including DNS, hostname resolution, and service discovery:
-
-**DNS Management**: Complete /etc/resolv.conf configuration supporting multiple nameservers, custom search domains, and advanced resolver options like EDNS and DNSSEC.
-
-**Hostname Resolution**: Automated /etc/hosts management with support for custom entries, FQDN resolution, and integration with dynamic infrastructure.
-
-**FQDN Setup**: Proper hostname and domain configuration ensuring consistent network identity across all managed systems.
-
-**Service Discovery**: Custom hostname entries support for internal service discovery without requiring external DNS infrastructure.
-
-### Time Synchronization
-
-Enterprise-grade time synchronization using Chrony with comprehensive configuration options:
-
-**NTP Sources**: Multiple time server configuration with fallback options, custom polling intervals, and server-specific parameters.
-
-**Network Access**: Configurable client access controls allowing other systems to synchronize time through managed servers.
-
-**Authentication**: Key-based authentication support for secure time synchronization in enterprise environments.
-
-**Hardware Integration**: Hardware timestamping support for high-precision timing requirements in financial and scientific applications.
-
-**Logging and Monitoring**: Comprehensive logging of time synchronization events, drift measurements, and source reliability statistics.
-
-### Storage Management
-
-Flexible LVM-based storage management supporting complex storage layouts:
-
-**Physical Volume Management**: Automatic physical volume creation and configuration with support for multiple storage devices.
-
-**Volume Group Setup**: Logical organization of storage resources allowing for flexible capacity management and future expansion.
-
-**Logical Volume Creation**: Automated logical volume creation with custom sizing options including fixed sizes and percentage-based allocation.
-
-**Mount Point Management**: Automatic filesystem creation and mounting with proper ownership and permission settings.
-
-**Growth Planning**: Support for percentage-based sizing (100%FREE) enabling efficient use of available storage and simplified future expansion.
-
-### Security and Certificate Management
-
-Comprehensive security baseline configuration:
-
-**CA Certificate Installation**: Automated installation of organization-specific certificate authorities enabling secure internal communications.
-
-**Swap Management**: Optional swap disabling for security-sensitive applications and performance optimization.
-
-**GPG Verification**: Configurable package signature verification with flexibility for development and testing environments.
-
-**Update Automation**: Intelligent security update automation balancing security requirements with operational stability.
-
-## Best Practices
-
-### Security Considerations
-
-- Enable `base_apply_security_patches: true` in all production environments to maintain security posture
-- Use `base_security_auto_reboot: true` carefully in clustered environments - consider maintenance windows and load balancing
-- Configure `base_ca_install_enabled: true` only with trusted certificate sources from your organization
-- Set `base_disable_gpg_check: false` in high-security environments to ensure package authenticity
-- Consider using `base_security_method: "apt-sources"` for environments requiring custom security repositories
-
-### Performance Optimization
-
-- Set `base_swap_disabled: true` for database servers and memory-intensive applications to prevent performance degradation
-- Use `base_chrony_config.minsources: 3` or higher for critical time-sensitive applications requiring high availability
-- Configure appropriate `base_reboot_timeout` values based on your infrastructure boot times and service dependencies
-- Consider `base_apply_kernel_patches: false` for systems where uptime is critical and kernel updates can be scheduled separately
-
-### Network Planning
-
-- Design `base_resolv_nameserver_search_domains` carefully to minimize DNS query overhead and avoid unnecessary lookups
-- Use `base_hostname_entries` for critical service discovery to reduce external DNS dependencies
-- Plan `base_domain` naming convention consistently across your organization for proper certificate management
-- Consider DNS caching and resolver performance when configuring `base_resolv_nameserver_resolv_options`
-
-### Storage Planning
-
-- Plan LVM layouts in `base_lvm_disks` with future growth in mind, using volume groups strategically
-- Use percentage sizing (`100%FREE`) for flexible capacity allocation in primary data volumes
-- Consider backup strategies when designing volume layouts - separate volume groups for data and backup storage
-- Plan logical volume names and mount points according to application requirements and operational procedures
-
-### Operational Considerations
-
-- Test patch management settings in development environments before applying to production
-- Document custom `base_additional_packages` requirements for environment reproducibility
-- Monitor `base_chrony_config` settings for time synchronization health in distributed systems
-- Plan maintenance windows around `base_reboot_after_patches` schedules
-
-## Troubleshooting
-
-### Common Issues
-
-**Patch Installation Failures**:
-- Check `base_disable_gpg_check` setting - may need to be `true` for repositories with signing issues
-- Verify repository accessibility and network connectivity
-- Review package manager logs for specific error messages
-- Consider temporary network or repository issues
-
-**Time Synchronization Problems**:
-- Verify NTP server accessibility from managed hosts
-- Check firewall rules for NTP traffic (UDP port 123)
-- Review `base_chrony_config.server` configuration for correct server addresses
-- Monitor chronyd logs for synchronization status
-
-**Storage Configuration Issues**:
-- Ensure block devices specified in `base_lvm_disks` actually exist on target systems
-- Verify sufficient disk space for requested logical volume sizes
-- Check for existing LVM configurations that might conflict
-- Review /var/log/messages for storage-related errors
-
-**Hostname Resolution Problems**:
-- Verify DNS configuration in `base_resolv_nameserver_entries`
-- Check network connectivity to configured DNS servers
-- Review `/etc/hosts` for conflicts with `base_hostname_entries`
-- Test DNS resolution manually with tools like `dig` or `nslookup`
-
-**Package Installation Issues**:
-- Review `base_os_specific_packages` compatibility with target OS versions
-- Check repository availability for `base_additional_packages`
-- Verify package name differences between distributions
-- Consider dependency conflicts with existing packages
-
-### Debug Mode
-
-Enable Ansible verbose logging with `-vvv` flag to get detailed information about task execution:
-
-```bash
-ansible-playbook -i inventory playbook.yml -vvv
-```
-
-For role-specific debugging, add debug tasks to verify variable values:
-
-```yaml
-- debug:
-    var: base_chrony_config
-  when: base_chrony_config is defined
-```
-
-### Log Files
-
-Monitor these log files for troubleshooting:
-
-- **Patch Management**: `/var/log/apt/` (Debian/Ubuntu), `/var/log/yum.log` (RHEL/CentOS)
-- **Time Synchronization**: `/var/log/chrony/` (if configured)
-- **System Events**: `/var/log/messages` or `/var/log/syslog`
-- **Package Management**: Distribution-specific package manager logs
+## Documentation Maintenance
+
+### Updating Dependencies
+
+1. **Update** `meta/main.yml`:
+   ```yaml
+   documented_requirements:
+     - src: https://github.com/user/role.git
+       version: master
+     - name: collection.name
+       version: 1.0.0
+   ```
+
+2. **Sync** `meta/install_requirements.yml` with the same requirements
+
+3. **Regenerate** documentation:
+   ```bash
+   pre-commit run --all-files
+   ```
+
+### Template Updates
+
+- Edit `.docsible_template.md` for structure changes
+- Test with: `docsible --role . --md-template .docsible_template.md -nob -com -tl`
+- Commit both template and generated README.md
+
+### Quick Checklist
+
+When updating dependencies:
+- [ ] Add to `meta/main.yml` → `documented_requirements`
+- [ ] Add to `meta/install_requirements.yml`
+- [ ] Run `pre-commit run --all-files`
+- [ ] Verify generated README.md
+- [ ] Commit all changes
 
 ## License
 
-MIT
+
+license (GPL-2.0-or-later, MIT, etc)
+
 
 ## Author Information
 
-This role has been created by gkorkmaz
-GitHub: https://github.com/ginanck
+
+**Author:** gkorkmaz
+
+
+
+
+**GitHub:** [gkorkmaz](https://github.com/gkorkmaz)
+
+---
+*This documentation was automatically generated using [docsible](https://github.com/zbohm/docsible).*
+<!-- DOCSIBLE END -->
