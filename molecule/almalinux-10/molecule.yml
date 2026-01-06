@@ -31,6 +31,7 @@ provisioner:
         base_hostname: "almalinux-10"
   playbooks:
     converge: ../resources/converge.yml
+    prepare: ../resources/prepare.yml
 verifier:
   name: ansible
   options:
