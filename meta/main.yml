@@ -24,18 +24,19 @@ galaxy_info:
     - noble     # 24.04
   - name: Debian
     versions:
-    - buster    # 10
     - bullseye  # 11
     - bookworm  # 12
-  - name: EL
+    - trixie    # 13
+  - name: AlmaLinux
     versions:
-    - "7"
     - "8"
     - "9"
-  - name: Rocky
+    - "10"
+  - name: RockyLinux
     versions:
     - "8.0"
     - "9.0"
+    - "10"
 
   galaxy_tags: []
 dependencies: []
