@@ -77,78 +77,78 @@ ansible-galaxy install -r meta/install_requirements.yml
 
 ### File: `defaults/main.yml`
 
-| Variable | Default Value | Description |
-|----------|---------------|-------------|
-| `base_domain` | `internal.guru` | None |
-| `base_hostname` | `` | None |
-| `base_hostname_configured` | `True` | None |
-| `base_ca_install_enabled` | `True` | None |
-| `base_ca_script_url` | `http://ca.internal.guru/scripts/install-linux.sh` | None |
-| `base_configure_cloud_init` | `True` | None |
-| `base_swap_disabled` | `False` | None |
-| `base_apply_os_patches` | `True` | None |
-| `base_apply_kernel_patches` | `True` | None |
-| `base_apply_security_patches` | `True` | None |
-| `base_reboot_after_patches` | `False` | None |
-| `base_reboot_timeout` | `600` | None |
-| `base_disable_gpg_check` | `True` | None |
-| `base_security_method` | `unattended-upgrades` | None |
-| `base_security_auto_reboot` | `False` | None |
-| `base_security_auto_reboot_time` | `02:00` | None |
-| `base_security_remove_unused_deps` | `True` | None |
-| `base_security_auto_updates_daily` | `False` | None |
-| `base_hostname_entries` | `[]` | None |
-| `base_resolv_conf_managed` | `True` | None |
-| `base_resolv_nameserver_entries` | `[]` | None |
-| `base_resolv_nameserver_entries.0` | `172.16.2.21` | None |
-| `base_resolv_nameserver_search_domains` | `[]` | None |
-| `base_resolv_nameserver_search_domains.0` | `.` | None |
-| `base_resolv_nameserver_resolv_options` | `[]` | None |
-| `base_resolv_nameserver_resolv_options.0` | `edns0` | None |
-| `base_resolv_nameserver_resolv_options.1` | `trust-ad` | None |
-| `base_default_packages` | `[]` | None |
-| `base_default_packages.0` | `vim` | None |
-| `base_default_packages.1` | `net-tools` | None |
-| `base_default_packages.2` | `tar` | None |
-| `base_default_packages.3` | `unzip` | None |
-| `base_default_packages.4` | `gzip` | None |
-| `base_default_packages.5` | `telnet` | None |
-| `base_default_packages.6` | `chrony` | None |
-| `base_default_packages.7` | `wget` | None |
-| `base_default_packages.8` | `curl` | None |
-| `base_default_packages.9` | `llvm` | None |
-| `base_default_packages.10` | `lvm2` | None |
-| `base_default_packages.11` | `git` | None |
-| `base_additional_packages` | `[]` | None |
-| `base_timezone` | `Europe/Helsinki` | None |
-| `base_chrony_keys` | `[]` | None |
-| `base_chrony_config` | `{}` | None |
-| `base_chrony_config.server` | `{}` | None |
-| `base_chrony_config.server.param` | `iburst` | None |
-| `base_chrony_config.server.name` | `[]` | None |
-| `base_chrony_config.server.name.0` | `0.fi.pool.ntp.org` | None |
-| `base_chrony_config.server.name.1` | `1.fi.pool.ntp.org` | None |
-| `base_chrony_config.server.name.2` | `2.fi.pool.ntp.org` | None |
-| `base_chrony_config.server.name.3` | `3.fi.pool.ntp.org` | None |
-| `base_chrony_config.sourcedir` | `/run/chrony-dhcp` | None |
-| `base_chrony_config.driftfile` | `/var/lib/chrony/drift` | None |
-| `base_chrony_config.makestep` | `1.0 3` | None |
-| `base_chrony_config.rtcsync` | `True` | None |
-| `base_chrony_config.hwtimestamp` | `*` | None |
-| `base_chrony_config.minsources` | `2` | None |
-| `base_chrony_config.local` | `{}` | None |
-| `base_chrony_config.local.stratum` | `10` | None |
-| `base_chrony_config.authselectmode` | `require` | None |
-| `base_chrony_config.keyfile` | `/etc/chrony.keys` | None |
-| `base_chrony_config.ntsdumpdir` | `/var/lib/chrony` | None |
-| `base_chrony_config.leapsecmode` | `slew` | None |
-| `base_chrony_config.leapsectz` | `right/UTC` | None |
-| `base_chrony_config.logdir` | `/var/log/chrony` | None |
-| `base_chrony_config.log` | `{}` | None |
-| `base_chrony_config.log.measurements` | `True` | None |
-| `base_chrony_config.log.statistics` | `True` | None |
-| `base_chrony_config.log.tracking` | `True` | None |
-| `base_lvm_disks` | `[]` | None |
+| Variable | Type | Default Value | Description |
+|----------|------|---------------|-------------|
+| [`base_domain`](defaults/main.yml#L4) | str | `internal.guru` | None |
+| [`base_hostname`](defaults/main.yml#L5) | str | `` | None |
+| [`base_hostname_configured`](defaults/main.yml#L6) | bool | `True` | None |
+| [`base_ca_install_enabled`](defaults/main.yml#L9) | bool | `True` | None |
+| [`base_ca_script_url`](defaults/main.yml#L10) | str | `http://ca.internal.guru/scripts/install-linux.sh` | None |
+| [`base_configure_cloud_init`](defaults/main.yml#L12) | bool | `True` | None |
+| [`base_swap_disabled`](defaults/main.yml#L13) | bool | `False` | None |
+| [`base_apply_os_patches`](defaults/main.yml#L16) | bool | `True` | None |
+| [`base_apply_kernel_patches`](defaults/main.yml#L17) | bool | `True` | None |
+| [`base_apply_security_patches`](defaults/main.yml#L18) | bool | `True` | None |
+| [`base_reboot_after_patches`](defaults/main.yml#L20) | bool | `False` | None |
+| [`base_reboot_timeout`](defaults/main.yml#L21) | int | `600` | None |
+| [`base_disable_gpg_check`](defaults/main.yml#L22) | bool | `True` | None |
+| [`base_security_method`](defaults/main.yml#L25) | str | `unattended-upgrades` | None |
+| [`base_security_auto_reboot`](defaults/main.yml#L26) | bool | `False` | None |
+| [`base_security_auto_reboot_time`](defaults/main.yml#L27) | str | `02:00` | None |
+| [`base_security_remove_unused_deps`](defaults/main.yml#L28) | bool | `True` | None |
+| [`base_security_auto_updates_daily`](defaults/main.yml#L29) | bool | `False` | None |
+| [`base_hostname_entries`](defaults/main.yml#L31) | list | `[]` | None |
+| [`base_resolv_conf_managed`](defaults/main.yml#L39) | bool | `True` | None |
+| [`base_resolv_nameserver_entries`](defaults/main.yml#L40) | list | See below | None |
+| [`base_resolv_nameserver_search_domains`](defaults/main.yml#L43) | list | See below | None |
+| [`base_resolv_nameserver_resolv_options`](defaults/main.yml#L46) | list | See below | None |
+| [`base_default_packages`](defaults/main.yml#L51) | list | See below | None |
+| [`base_additional_packages`](defaults/main.yml#L65) | list | `[]` | None |
+| [`base_timezone`](defaults/main.yml#L68) | str | `Europe/Helsinki` | None |
+| [`base_chrony_keys`](defaults/main.yml#L69) | list | `[]` | None |
+| [`base_chrony_config`](defaults/main.yml#L70) | dict | See below | None |
+| [`base_lvm_disks`](defaults/main.yml#L101) | list | `[]` | None |
+
+#### `base_resolv_nameserver_entries`
+
+```yaml
+- 
+```
+
+#### `base_resolv_nameserver_search_domains`
+
+```yaml
+- 
+```
+
+#### `base_resolv_nameserver_resolv_options`
+
+```yaml
+- 
+- 
+```
+
+#### `base_default_packages`
+
+```yaml
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+```
+
+#### `base_chrony_config`
+
+```yaml
+```
 
 
 
@@ -159,260 +159,347 @@ ansible-galaxy install -r meta/install_requirements.yml
 This role performs the following tasks:
 
 
-### `resolve.yml`
+### File: `tasks/resolve.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update resolv.conf](tasks/resolve.yml#L) | ansible.builtin.template | No | N/A |
 
-- **Update resolv.conf**
 
 
-### `cloud_init.yml`
 
+### File: `tasks/cloud_init.yml`
 
-- **Ensure cloud-init config directory exists**
-- **Set preserve_hostname to true in cloud-init config**
-- **Remove update_etc_hosts from cloud_init_modules**
-- **Restart cloud-init**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Ensure cloud-init config directory exists](tasks/cloud_init.yml#L) | ansible.builtin.file | No | N/A |
+| [Set preserve_hostname to true in cloud-init config](tasks/cloud_init.yml#L) | ansible.builtin.lineinfile | No | N/A |
+| [Remove update_etc_hosts from cloud_init_modules](tasks/cloud_init.yml#L) | ansible.builtin.lineinfile | No | N/A |
+| [Restart cloud-init](tasks/cloud_init.yml#L) | ansible.builtin.systemd | Yes | N/A |
 
 
-### `os_patches.yml`
 
 
-- **Apply security patches based on package manager**
-- **Apply OS patches based on package manager**
-- **Apply kernel patches based on package manager**
-- **Check if reboot is required (Debian/Ubuntu)**
-- **Check if reboot is required (RedHat/CentOS/Rocky)**
-- **Set reboot required fact**
-- **Reboot system if required and configured**
-- **Display patch results**
+### File: `tasks/os_patches.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Apply security patches based on package manager](tasks/os_patches.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Apply OS patches based on package manager](tasks/os_patches.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Apply kernel patches based on package manager](tasks/os_patches.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Check if reboot is required (Debian/Ubuntu)](tasks/os_patches.yml#L) | ansible.builtin.stat | Yes | N/A |
+| [Check if reboot is required (RedHat/CentOS/Rocky)](tasks/os_patches.yml#L) | ansible.builtin.shell | Yes | N/A |
+| [Set reboot required fact](tasks/os_patches.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Reboot system if required and configured](tasks/os_patches.yml#L) | ansible.builtin.reboot | Yes | N/A |
+| [Display patch results](tasks/os_patches.yml#L) | ansible.builtin.debug | No | N/A |
 
-### `chronyd.yml`
 
 
-- **Generate /etc/chrony.conf**
-- **Generate /etc/chrony.keys**
-- **Create systemd drop-in directory for chrony (container only)**
-- **Force -x option for chrony in containers (Ubuntu 20.04 workaround)**
-- **Reload systemd daemon**
-- **Start chrony**
 
+### File: `tasks/chronyd.yml`
 
-### `swap.yml`
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Generate /etc/chrony.conf](tasks/chronyd.yml#L) | ansible.builtin.template | Yes | N/A |
+| [Generate /etc/chrony.keys](tasks/chronyd.yml#L) | ansible.builtin.template | Yes | N/A |
+| [Create systemd drop-in directory for chrony (container only)](tasks/chronyd.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Force -x option for chrony in containers (Ubuntu 20.04 workaround)](tasks/chronyd.yml#L) | ansible.builtin.copy | Yes | N/A |
+| [Reload systemd daemon](tasks/chronyd.yml#L) | ansible.builtin.systemd | Yes | N/A |
+| [Start chrony](tasks/chronyd.yml#L) | ansible.builtin.systemd | Yes | N/A |
 
 
-- **Disable swap at runtime**
-- **Disable swap permanently (in /etc/fstab)**
 
 
-### `selinux.yml`
+### File: `tasks/swap.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Disable swap at runtime](tasks/swap.yml#L) | ansible.builtin.command | No | N/A |
+| [Disable swap permanently (in /etc/fstab)](tasks/swap.yml#L) | ansible.builtin.replace | No | N/A |
 
-- **Check if SELinux is available**
-- **Disable SELinux immediately (if installed)**
-- **Disable SELinux permanently (if installed)**
-- **Check if AppArmor is installed (Debian/Ubuntu)**
-- **Disable AppArmor (if installed on Debian/Ubuntu)**
 
 
-### `timezone.yml`
 
+### File: `tasks/selinux.yml`
 
-- **Set timezone on nodes**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Check if SELinux is available](tasks/selinux.yml#L) | ansible.builtin.stat | No | N/A |
+| [Disable SELinux immediately (if installed)](tasks/selinux.yml#L) | ansible.builtin.command | Yes | N/A |
+| [Disable SELinux permanently (if installed)](tasks/selinux.yml#L) | ansible.builtin.lineinfile | Yes | N/A |
+| [Check if AppArmor is installed (Debian/Ubuntu)](tasks/selinux.yml#L) | ansible.builtin.stat | Yes | N/A |
+| [Disable AppArmor (if installed on Debian/Ubuntu)](tasks/selinux.yml#L) | ansible.builtin.service | Yes | N/A |
 
 
-### `firewall.yml`
 
 
-- **Gather OS facts**
-- **Stop and disable firewalld service**
-- **Stop and disable ufw service**
+### File: `tasks/timezone.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Set timezone on nodes](tasks/timezone.yml#L) | community.general.timezone | No | N/A |
 
-### `grow-partition.yml`
 
 
-- **Extract base disk and partition number for partitioned disks**
-- **Check if partition needs to grow (dry-run)**
-- **Grow partition only if needed**
 
+### File: `tasks/firewall.yml`
 
-### `lvm.yml`
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Gather OS facts](tasks/firewall.yml#L) | ansible.builtin.setup | No | N/A |
+| [Stop and disable firewalld service](tasks/firewall.yml#L) | ansible.builtin.systemd | Yes | N/A |
+| [Stop and disable ufw service](tasks/firewall.yml#L) | ansible.builtin.systemd | Yes | N/A |
 
 
-- **Detect disk type (partition vs whole disk)**
-- **Extend partition-based disk**
-- **Create a Volume Group**
-- **Create a Logical Volume**
-- **Check if filesystem exists**
-- **Make Filesystem**
-- **Create mount point directories**
-- **Mount Filesystem**
 
 
-### `main.yml`
+### File: `tasks/grow-partition.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Extract base disk and partition number for partitioned disks](tasks/grow-partition.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Check if partition needs to grow (dry-run)](tasks/grow-partition.yml#L) | ansible.builtin.command | No | N/A |
+| [Grow partition only if needed](tasks/grow-partition.yml#L) | ansible.builtin.command | Yes | N/A |
 
-- **Include Base Vars**
-- **Install Prerequisite Packages**
-- **Apply OS Patches**
-- **Setup Epel-Repo**
-- **Install CA Certificate**
-- **Disable Cloud-Init manage_hostname**
-- **Setup resolve.conf**
-- **Setup Hostname of the Nodes**
-- **Setup Hosts**
-- **Setup Timezone**
-- **Setup Chrony**
-- **Disable Selinux**
-- **Disable Firewall**
-- **Disable Swap**
-- **Setup LVM Disk**
 
 
-### `certificate.yml`
 
+### File: `tasks/lvm.yml`
 
-- **Download CA certificate installation script**
-- **Check if downloaded file exists and has content**
-- **Check first few lines of downloaded file for debugging**
-- **Display download result for debugging**
-- **Check if CA script download was successful**
-- **Validate downloaded script is executable**
-- **Display script validation result**
-- **Execute CA certificate installation script**
-- **Remove temporary installation script**
-- **Display certificate installation output**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Detect disk type (partition vs whole disk)](tasks/lvm.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Extend partition-based disk](tasks/lvm.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Create a Volume Group](tasks/lvm.yml#L) | community.general.lvg | No | N/A |
+| [Create a Logical Volume](tasks/lvm.yml#L) | community.general.lvol | No | N/A |
+| [Check if filesystem exists](tasks/lvm.yml#L) | ansible.builtin.command | No | N/A |
+| [Make Filesystem](tasks/lvm.yml#L) | community.general.filesystem | Yes | N/A |
+| [Create mount point directories](tasks/lvm.yml#L) | ansible.builtin.file | No | N/A |
+| [Mount Filesystem](tasks/lvm.yml#L) | ansible.posix.mount | No | N/A |
 
 
-### `hostname.yml`
 
 
-- **Set hostname on the node**
+### File: `tasks/main.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Include Base Vars](tasks/main.yml#L) | ansible.builtin.include_vars | No | N/A |
+| [Install Prerequisite Packages](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Apply OS Patches](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Setup Epel-Repo](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Install CA Certificate](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Disable Cloud-Init manage_hostname](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Setup resolve.conf](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Setup Hostname of the Nodes](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Setup Hosts](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Setup Timezone](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Setup Chrony](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Disable Selinux](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Disable Firewall](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
+| [Disable Swap](tasks/main.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Setup LVM Disk](tasks/main.yml#L) | ansible.builtin.include_tasks | No | N/A |
 
-### `hosts.yml`
 
 
-- **Gather network facts**
-- **Check if /etc/hosts is accessible**
-- **Update hostname entries in /etc/hosts**
 
+### File: `tasks/certificate.yml`
 
-### `epel/RedHat.yml`
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Download CA certificate installation script](tasks/certificate.yml#L) | ansible.builtin.get_url | No | N/A |
+| [Check if downloaded file exists and has content](tasks/certificate.yml#L) | ansible.builtin.stat | No | N/A |
+| [Check first few lines of downloaded file for debugging](tasks/certificate.yml#L) | ansible.builtin.shell | Yes | N/A |
+| [Display download result for debugging](tasks/certificate.yml#L) | ansible.builtin.debug | No | N/A |
+| [Check if CA script download was successful](tasks/certificate.yml#L) | ansible.builtin.debug | Yes | N/A |
+| [Validate downloaded script is executable](tasks/certificate.yml#L) | ansible.builtin.shell | Yes | N/A |
+| [Display script validation result](tasks/certificate.yml#L) | ansible.builtin.debug | Yes | N/A |
+| [Execute CA certificate installation script](tasks/certificate.yml#L) | ansible.builtin.shell | Yes | N/A |
+| [Remove temporary installation script](tasks/certificate.yml#L) | ansible.builtin.file | Yes | N/A |
+| [Display certificate installation output](tasks/certificate.yml#L) | ansible.builtin.debug | Yes | N/A |
 
 
-- **Setup EPEL repo**
 
 
-### `patches/security/apt-sources.yml`
+### File: `tasks/hostname.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Set hostname on the node](tasks/hostname.yml#L) | ansible.builtin.hostname | No | N/A |
 
-- **Update package cache (apt)**
-- **Create security sources directory**
-- **Create security-only sources list for Debian**
-- **Create security-only sources list for Ubuntu**
-- **Update package cache with security sources**
-- **Apply security updates for Debian systems**
-- **Apply security updates for Ubuntu systems**
-- **Remove unused packages after security updates**
-- **Display security update results**
 
 
-### `patches/security/apt-unattended.yml`
 
+### File: `tasks/hosts.yml`
 
-- **Update package cache (apt)**
-- **Install required packages for security updates**
-- **Configure unattended-upgrades for security updates only**
-- **Configure unattended-upgrades automatic updates**
-- **Enable unattended-upgrades service**
-- **Run dry-run to check available security updates**
-- **Check if security updates are available**
-- **Display available security updates**
-- **Display no security updates message**
-- **Apply security updates using unattended-upgrades**
-- **Clean up package cache after security updates**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Gather network facts](tasks/hosts.yml#L) | ansible.builtin.setup | No | N/A |
+| [Check if /etc/hosts is accessible](tasks/hosts.yml#L) | ansible.builtin.stat | No | N/A |
+| [Update hostname entries in /etc/hosts](tasks/hosts.yml#L) | ansible.builtin.template | No | N/A |
 
 
-### `patches/security/apt.yml`
 
 
-- **Apply security updates using unattended-upgrades method**
-- **Apply security updates using apt-sources method**
+### File: `tasks/epel/RedHat.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Setup EPEL repo](tasks/epel/RedHat.yml#L) | ansible.builtin.dnf | No | N/A |
 
-### `patches/security/yum.yml`
 
 
-- **Update package cache (yum)**
-- **Apply security updates only (yum)**
 
+### File: `tasks/patches/security/apt-sources.yml`
 
-### `patches/security/dnf.yml`
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (apt)](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.apt | No | N/A |
+| [Create security sources directory](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.file | No | N/A |
+| [Create security-only sources list for Debian](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.template | Yes | N/A |
+| [Create security-only sources list for Ubuntu](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.template | Yes | N/A |
+| [Update package cache with security sources](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.apt | No | N/A |
+| [Apply security updates for Debian systems](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.apt | Yes | N/A |
+| [Apply security updates for Ubuntu systems](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.apt | Yes | N/A |
+| [Remove unused packages after security updates](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.apt | Yes | N/A |
+| [Display security update results](tasks/patches/security/apt-sources.yml#L) | ansible.builtin.debug | No | N/A |
 
 
-- **Update package cache (dnf)**
-- **Apply security updates only (dnf)**
 
 
-### `patches/os/apt.yml`
+### File: `tasks/patches/security/apt-unattended.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (apt)](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.apt | No | N/A |
+| [Install required packages for security updates](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.apt | No | N/A |
+| [Configure unattended-upgrades for security updates only](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.template | No | N/A |
+| [Configure unattended-upgrades automatic updates](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.template | No | N/A |
+| [Enable unattended-upgrades service](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.systemd | No | N/A |
+| [Run dry-run to check available security updates](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.command | No | N/A |
+| [Check if security updates are available](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.set_fact | No | N/A |
+| [Display available security updates](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.debug | Yes | N/A |
+| [Display no security updates message](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.debug | Yes | N/A |
+| [Apply security updates using unattended-upgrades](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.command | Yes | N/A |
+| [Clean up package cache after security updates](tasks/patches/security/apt-unattended.yml#L) | ansible.builtin.apt | No | N/A |
 
-- **Update package cache (apt)**
-- **Get list of upgradable packages excluding kernel packages**
-- **Apply OS updates excluding kernel packages (apt)**
 
 
-### `patches/os/yum.yml`
 
+### File: `tasks/patches/security/apt.yml`
 
-- **Update package cache (yum)**
-- **Apply all available OS updates excluding kernel (yum)**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Apply security updates using unattended-upgrades method](tasks/patches/security/apt.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
+| [Apply security updates using apt-sources method](tasks/patches/security/apt.yml#L) | ansible.builtin.include_tasks | Yes | N/A |
 
 
-### `patches/os/dnf.yml`
 
 
-- **Update package cache (dnf)**
-- **Apply all available OS updates excluding kernel (dnf)**
+### File: `tasks/patches/security/yum.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (yum)](tasks/patches/security/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply security updates only (yum)](tasks/patches/security/yum.yml#L) | ansible.builtin.yum | No | N/A |
 
-### `patches/kernel/apt.yml`
 
 
-- **Update package cache (apt)**
-- **Apply kernel updates (apt)**
 
+### File: `tasks/patches/security/dnf.yml`
 
-### `patches/kernel/yum.yml`
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (dnf)](tasks/patches/security/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
+| [Apply security updates only (dnf)](tasks/patches/security/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
 
 
-- **Apply kernel updates (yum)**
 
 
-### `patches/kernel/dnf.yml`
+### File: `tasks/patches/os/apt.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (apt)](tasks/patches/os/apt.yml#L) | ansible.builtin.apt | No | N/A |
+| [Get list of upgradable packages excluding kernel packages](tasks/patches/os/apt.yml#L) | ansible.builtin.shell | No | N/A |
+| [Apply OS updates excluding kernel packages (apt)](tasks/patches/os/apt.yml#L) | ansible.builtin.apt | Yes | N/A |
 
-- **Apply kernel updates (dnf)**
 
 
-### `package/apt.yml`
 
+### File: `tasks/patches/os/yum.yml`
 
-- **Install prerequisites (Debian family)**
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (yum)](tasks/patches/os/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply all available OS updates excluding kernel (yum)](tasks/patches/os/yum.yml#L) | ansible.builtin.yum | No | N/A |
 
 
-### `package/yum.yml`
 
 
-- **Install prerequisites (RedHat family with yum)**
+### File: `tasks/patches/os/dnf.yml`
 
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (dnf)](tasks/patches/os/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
+| [Apply all available OS updates excluding kernel (dnf)](tasks/patches/os/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
 
-### `package/dnf.yml`
 
 
-- **Install prerequisites (RedHat family with dnf)**
+
+### File: `tasks/patches/kernel/apt.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Update package cache (apt)](tasks/patches/kernel/apt.yml#L) | ansible.builtin.apt | No | N/A |
+| [Apply kernel updates (apt)](tasks/patches/kernel/apt.yml#L) | ansible.builtin.apt | No | N/A |
+
+
+
+
+### File: `tasks/patches/kernel/yum.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Apply kernel updates (yum)](tasks/patches/kernel/yum.yml#L) | ansible.builtin.yum | No | N/A |
+
+
+
+
+### File: `tasks/patches/kernel/dnf.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Apply kernel updates (dnf)](tasks/patches/kernel/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
+
+
+
+
+### File: `tasks/package/apt.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Install prerequisites (Debian family)](tasks/package/apt.yml#L) | ansible.builtin.apt | No | N/A |
+
+
+
+
+### File: `tasks/package/yum.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Install prerequisites (RedHat family with yum)](tasks/package/yum.yml#L) | ansible.builtin.yum | No | N/A |
+
+
+
+
+### File: `tasks/package/dnf.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Install prerequisites (RedHat family with dnf)](tasks/package/dnf.yml#L) | ansible.builtin.dnf | No | N/A |
+
+
 
 
 
