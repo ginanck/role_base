@@ -25,9 +25,9 @@ role_base to configure base settings
 
 - Supported platforms:
   - Ubuntu (focal, jammy, noble)
-  - Debian (buster, bullseye, bookworm)
-  - EL (7, 8, 9)
-  - Rocky (8.0, 9.0)
+  - Debian (bullseye, bookworm, trixie)
+  - AlmaLinux (8, 9, 10)
+  - RockyLinux (8.0, 9.0, 10)
 
 
 
