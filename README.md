@@ -73,82 +73,84 @@ ansible-galaxy install -r meta/install_requirements.yml
 
 ## Role Variables
 
+**These are static variables with lower priority**
 
 
-### File: `defaults/main.yml`
 
-| Variable | Type | Default Value | Description |
-|----------|------|---------------|-------------|
-| [`base_domain`](defaults/main.yml#L4) | str | `internal.guru` | None |
-| [`base_hostname`](defaults/main.yml#L5) | str | `` | None |
-| [`base_hostname_configured`](defaults/main.yml#L6) | bool | `True` | None |
-| [`base_ca_install_enabled`](defaults/main.yml#L9) | bool | `True` | None |
-| [`base_ca_script_url`](defaults/main.yml#L10) | str | `http://ca.internal.guru/scripts/install-linux.sh` | None |
-| [`base_configure_cloud_init`](defaults/main.yml#L12) | bool | `True` | None |
-| [`base_swap_disabled`](defaults/main.yml#L13) | bool | `False` | None |
-| [`base_apply_os_patches`](defaults/main.yml#L16) | bool | `True` | None |
-| [`base_apply_kernel_patches`](defaults/main.yml#L17) | bool | `True` | None |
-| [`base_apply_security_patches`](defaults/main.yml#L18) | bool | `True` | None |
-| [`base_reboot_after_patches`](defaults/main.yml#L20) | bool | `False` | None |
-| [`base_reboot_timeout`](defaults/main.yml#L21) | int | `600` | None |
-| [`base_disable_gpg_check`](defaults/main.yml#L22) | bool | `True` | None |
-| [`base_security_method`](defaults/main.yml#L25) | str | `unattended-upgrades` | None |
-| [`base_security_auto_reboot`](defaults/main.yml#L26) | bool | `False` | None |
-| [`base_security_auto_reboot_time`](defaults/main.yml#L27) | str | `02:00` | None |
-| [`base_security_remove_unused_deps`](defaults/main.yml#L28) | bool | `True` | None |
-| [`base_security_auto_updates_daily`](defaults/main.yml#L29) | bool | `False` | None |
-| [`base_hostname_entries`](defaults/main.yml#L31) | list | `[]` | None |
-| [`base_resolv_conf_managed`](defaults/main.yml#L39) | bool | `True` | None |
-| [`base_resolv_nameserver_entries`](defaults/main.yml#L40) | list | See below | None |
-| [`base_resolv_nameserver_search_domains`](defaults/main.yml#L43) | list | See below | None |
-| [`base_resolv_nameserver_resolv_options`](defaults/main.yml#L46) | list | See below | None |
-| [`base_default_packages`](defaults/main.yml#L51) | list | See below | None |
-| [`base_additional_packages`](defaults/main.yml#L65) | list | `[]` | None |
-| [`base_timezone`](defaults/main.yml#L68) | str | `Europe/Helsinki` | None |
-| [`base_chrony_keys`](defaults/main.yml#L69) | list | `[]` | None |
-| [`base_chrony_config`](defaults/main.yml#L70) | dict | See below | None |
-| [`base_lvm_disks`](defaults/main.yml#L101) | list | `[]` | None |
+#### File: defaults/main.yml
 
-#### `base_resolv_nameserver_entries`
-
-```yaml
-- 
-```
-
-#### `base_resolv_nameserver_search_domains`
-
-```yaml
-- 
-```
-
-#### `base_resolv_nameserver_resolv_options`
-
-```yaml
-- 
-- 
-```
-
-#### `base_default_packages`
-
-```yaml
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-```
-
-#### `base_chrony_config`
-
-```yaml
-```
+| Var | Type | Value |
+|-----|------|-------|
+| [base_additional_packages](defaults/main.yml#L65) | list |  |
+| [base_apply_kernel_patches](defaults/main.yml#L17) | bool | `True` |
+| [base_apply_os_patches](defaults/main.yml#L16) | bool | `True` |
+| [base_apply_security_patches](defaults/main.yml#L18) | bool | `True` |
+| [base_ca_install_enabled](defaults/main.yml#L9) | bool | `True` |
+| [base_ca_script_url](defaults/main.yml#L10) | str | `http://ca.internal.guru/scripts/install-linux.sh` |
+| [base_chrony_config](defaults/main.yml#L70) | dict |  |
+| [base_chrony_config.authselectmode](defaults/main.yml#L89) | str | `require` |
+| [base_chrony_config.driftfile](defaults/main.yml#L79) | str | `/var/lib/chrony/drift` |
+| [base_chrony_config.hwtimestamp](defaults/main.yml#L82) | str | `*` |
+| [base_chrony_config.keyfile](defaults/main.yml#L90) | str | `/etc/chrony.keys` |
+| [base_chrony_config.leapsecmode](defaults/main.yml#L92) | str | `slew` |
+| [base_chrony_config.leapsectz](defaults/main.yml#L93) | str | `right/UTC` |
+| [base_chrony_config.local](defaults/main.yml#L87) | dict |  |
+| [base_chrony_config.local.stratum](defaults/main.yml#L88) | int | `10` |
+| [base_chrony_config.log](defaults/main.yml#L95) | dict |  |
+| [base_chrony_config.log.measurements](defaults/main.yml#L96) | bool | `True` |
+| [base_chrony_config.log.statistics](defaults/main.yml#L97) | bool | `True` |
+| [base_chrony_config.log.tracking](defaults/main.yml#L98) | bool | `True` |
+| [base_chrony_config.logdir](defaults/main.yml#L94) | str | `/var/log/chrony` |
+| [base_chrony_config.makestep](defaults/main.yml#L80) | str | `1.0 3` |
+| [base_chrony_config.minsources](defaults/main.yml#L83) | int | `2` |
+| [base_chrony_config.ntsdumpdir](defaults/main.yml#L91) | str | `/var/lib/chrony` |
+| [base_chrony_config.rtcsync](defaults/main.yml#L81) | bool | `True` |
+| [base_chrony_config.server](defaults/main.yml#L71) | dict |  |
+| [base_chrony_config.server.name](defaults/main.yml#L73) | list |  |
+| [base_chrony_config.server.name.0](defaults/main.yml#L74) | str | `0.fi.pool.ntp.org` |
+| [base_chrony_config.server.name.1](defaults/main.yml#L75) | str | `1.fi.pool.ntp.org` |
+| [base_chrony_config.server.name.2](defaults/main.yml#L76) | str | `2.fi.pool.ntp.org` |
+| [base_chrony_config.server.name.3](defaults/main.yml#L77) | str | `3.fi.pool.ntp.org` |
+| [base_chrony_config.server.param](defaults/main.yml#L72) | str | `iburst` |
+| [base_chrony_config.sourcedir](defaults/main.yml#L78) | str | `/run/chrony-dhcp` |
+| [base_chrony_keys](defaults/main.yml#L69) | list |  |
+| [base_configure_cloud_init](defaults/main.yml#L12) | bool | `True` |
+| [base_default_packages](defaults/main.yml#L51) | list |  |
+| [base_default_packages.0](defaults/main.yml#L52) | str | `vim` |
+| [base_default_packages.1](defaults/main.yml#L53) | str | `net-tools` |
+| [base_default_packages.10](defaults/main.yml#L62) | str | `lvm2` |
+| [base_default_packages.11](defaults/main.yml#L63) | str | `git` |
+| [base_default_packages.2](defaults/main.yml#L54) | str | `tar` |
+| [base_default_packages.3](defaults/main.yml#L55) | str | `unzip` |
+| [base_default_packages.4](defaults/main.yml#L56) | str | `gzip` |
+| [base_default_packages.5](defaults/main.yml#L57) | str | `telnet` |
+| [base_default_packages.6](defaults/main.yml#L58) | str | `chrony` |
+| [base_default_packages.7](defaults/main.yml#L59) | str | `wget` |
+| [base_default_packages.8](defaults/main.yml#L60) | str | `curl` |
+| [base_default_packages.9](defaults/main.yml#L61) | str | `llvm` |
+| [base_disable_gpg_check](defaults/main.yml#L22) | bool | `True` |
+| [base_domain](defaults/main.yml#L4) | str | `internal.guru` |
+| [base_hostname](defaults/main.yml#L5) | str |  |
+| [base_hostname_configured](defaults/main.yml#L6) | bool | `True` |
+| [base_hostname_entries](defaults/main.yml#L31) | list |  |
+| [base_lvm_disks](defaults/main.yml#L101) | list |  |
+| [base_reboot_after_patches](defaults/main.yml#L20) | bool |  |
+| [base_reboot_timeout](defaults/main.yml#L21) | int | `600` |
+| [base_resolv_conf_managed](defaults/main.yml#L39) | bool | `True` |
+| [base_resolv_nameserver_entries](defaults/main.yml#L40) | list |  |
+| [base_resolv_nameserver_entries.0](defaults/main.yml#L41) | str | `172.16.2.21` |
+| [base_resolv_nameserver_resolv_options](defaults/main.yml#L46) | list |  |
+| [base_resolv_nameserver_resolv_options.0](defaults/main.yml#L47) | str | `edns0` |
+| [base_resolv_nameserver_resolv_options.1](defaults/main.yml#L48) | str | `trust-ad` |
+| [base_resolv_nameserver_search_domains](defaults/main.yml#L43) | list |  |
+| [base_resolv_nameserver_search_domains.0](defaults/main.yml#L44) | str | `.` |
+| [base_security_auto_reboot](defaults/main.yml#L26) | bool |  |
+| [base_security_auto_reboot_time](defaults/main.yml#L27) | str | `02:00` |
+| [base_security_auto_updates_daily](defaults/main.yml#L29) | bool |  |
+| [base_security_method](defaults/main.yml#L25) | str | `unattended-upgrades` |
+| [base_security_remove_unused_deps](defaults/main.yml#L28) | bool | `True` |
+| [base_swap_disabled](defaults/main.yml#L13) | bool |  |
+| [base_timezone](defaults/main.yml#L68) | str | `Europe/Helsinki` |
 
 
 
