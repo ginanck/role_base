@@ -48,11 +48,15 @@ Thumbs.db
 *.mov
 *.wmv
 
-collections/
-roles/
 
 # Shared configuration files (managed by pre-commit)
 .config/
 
 # Shared configuration files (managed by pre-commit)
 .configs/
+
+# ansible-lint cache
+.ansible/*
+
+# molecule dependency installs (roles/ and collections/ in one place)
+dependency/

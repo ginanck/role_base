@@ -8,6 +8,7 @@ base_common_packages:
   - selinux-utils
   - policycoreutils
   - liblvm2-dev
+  - iproute2
   - "{{ base_bind_package }}"
 
 base_os_specific_packages: "{{ base_common_packages + (['util-linux-extra'] if (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '24') or (ansible_distribution == 'Debian' and ansible_distribution_major_version == '13') else []) }}"
