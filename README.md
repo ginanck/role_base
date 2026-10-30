@@ -402,8 +402,7 @@ This role performs the following tasks:
 
 | Task Name | Module | Has Conditions | Line |
 |-----------|--------|----------------|------|
-| [Update package cache (yum)](tasks/patches/security/yum.yml#L) | ansible.builtin.yum | No | N/A |
-| [Apply security updates only (yum)](tasks/patches/security/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply the dnf task set for yum-based hosts](tasks/patches/security/yum.yml#L) | ansible.builtin.include_tasks | No | N/A |
 
 
 
@@ -433,8 +432,7 @@ This role performs the following tasks:
 
 | Task Name | Module | Has Conditions | Line |
 |-----------|--------|----------------|------|
-| [Update package cache (yum)](tasks/patches/os/yum.yml#L) | ansible.builtin.yum | No | N/A |
-| [Apply all available OS updates excluding kernel (yum)](tasks/patches/os/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply the dnf task set for yum-based hosts](tasks/patches/os/yum.yml#L) | ansible.builtin.include_tasks | No | N/A |
 
 
 
@@ -463,7 +461,7 @@ This role performs the following tasks:
 
 | Task Name | Module | Has Conditions | Line |
 |-----------|--------|----------------|------|
-| [Apply kernel updates (yum)](tasks/patches/kernel/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply the dnf task set for yum-based hosts](tasks/patches/kernel/yum.yml#L) | ansible.builtin.include_tasks | No | N/A |
 
 
 
@@ -490,7 +488,7 @@ This role performs the following tasks:
 
 | Task Name | Module | Has Conditions | Line |
 |-----------|--------|----------------|------|
-| [Install prerequisites (RedHat family with yum)](tasks/package/yum.yml#L) | ansible.builtin.yum | No | N/A |
+| [Apply the dnf task set for yum-based hosts](tasks/package/yum.yml#L) | ansible.builtin.include_tasks | No | N/A |
 
 
 

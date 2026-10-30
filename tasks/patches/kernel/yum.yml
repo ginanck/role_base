@@ -1,9 +1,7 @@
 ---
-# Apply kernel patches/updates for RHEL/CentOS (yum)
+# Compatibility entry point for hosts whose ansible_pkg_mgr is 'yum'.
+# The deprecated yum module is gone; the dnf module also drives yum-based
+# systems that have dnf available, so delegate to the dnf task set.
 
-- name: Apply kernel updates (yum)
-  ansible.builtin.yum:
-    name: 'kernel*'
-    state: latest  # noqa package-latest
-    disable_gpg_check: "{{ base_disable_gpg_check }}"
-  register: yum_kernel_update
+- name: Apply the dnf task set for yum-based hosts
+  ansible.builtin.include_tasks: dnf.yml
